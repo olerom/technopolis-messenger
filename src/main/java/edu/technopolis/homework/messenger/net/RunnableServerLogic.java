@@ -1,5 +1,7 @@
 package edu.technopolis.homework.messenger.net;
 
+import edu.technopolis.homework.messenger.store.Database;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
@@ -13,8 +15,9 @@ import java.util.Arrays;
 public class RunnableServerLogic implements Runnable {
     private Socket clientSocket;
     private Protocol protocol;
+    private Database database;
 
-    public RunnableServerLogic(Socket clientSocket) {
+    public RunnableServerLogic(Socket clientSocket, Database database) {
         this.clientSocket = clientSocket;
         this.protocol = new StringProtocol();
     }
