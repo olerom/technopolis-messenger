@@ -1,13 +1,6 @@
 package edu.technopolis.homework.messenger.teacher.client;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.util.Arrays;
-import java.util.Scanner;
-
 import edu.technopolis.homework.messenger.messages.Message;
 import edu.technopolis.homework.messenger.messages.TextMessage;
 import edu.technopolis.homework.messenger.messages.Type;
@@ -15,11 +8,20 @@ import edu.technopolis.homework.messenger.net.Protocol;
 import edu.technopolis.homework.messenger.net.ProtocolException;
 import edu.technopolis.homework.messenger.net.StringProtocol;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.util.Arrays;
+
 
 /**
  *
  */
 public class MessengerClient {
+
+    private static final int PORT = 19000;
+    private static final String HOST = "localhost";
 
     /**
      * Протокол, хост и порт инициализируются из конфига
@@ -105,14 +107,31 @@ public class MessengerClient {
         String cmdType = tokens[0];
         switch (cmdType) {
             case "/login":
+                try {
+                    String login = tokens[1];
+                    String password = tokens[2];
+                } catch (IndexOutOfBoundsException e){
+                    System.out.println("Not enough arguments. Make sure that you mention login and password");
+                }
+
+
+
+
                 // TODO: реализация
                 break;
             case "/help":
-                // TODO: реализация
+                String printHelp = "/login <логин_пользователя> <пароль>\n" +
+                        "/info [id]\n" +
+                        "/chat_list\n" +
+                        "/chat_create <user_id list>\n" +
+                        "/chat_history <chat_id>\n" +
+                        "/text <id> <message>\n";
+
+                System.out.println(printHelp);
                 break;
             case "/text":
                 // FIXME: пример реализации для простого текстового сообщения
-                TextMessage sendMessage = new TextMessage();
+                TextMessage sendMessage = new TextMessage(tokens[1], Type.MSG_TEXT, 0L, 1L);
                 sendMessage.setType(Type.MSG_TEXT);
                 sendMessage.setText(tokens[1]);
                 send(sendMessage);
@@ -134,20 +153,24 @@ public class MessengerClient {
     }
 
     public static void main(String[] args) throws Exception {
+        run(args);
+    }
+
+    private static void run(String[] args) throws Exception {
 
         MessengerClient client = new MessengerClient();
-        client.setHost("localhost");
-        client.setPort(19000);
+        client.setHost(HOST);
+        client.setPort(PORT);
         client.setProtocol(new StringProtocol());
 
         try {
             client.initSocket();
+            FastScanner scanner = new FastScanner();
 
             // Цикл чтения с консоли
-            Scanner scanner = new Scanner(System.in);
             System.out.println("$");
             while (true) {
-                String input = scanner.nextLine();
+                String input = scanner.readLine();
                 if ("q".equals(input)) {
                     return;
                 }

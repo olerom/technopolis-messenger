@@ -8,6 +8,16 @@ import java.util.Objects;
 public class TextMessage extends Message {
     private String text;
 
+    public TextMessage(String text, Type type, Long id, Long senderId) {
+        this.text = text;
+        setType(type);
+        setId(id);
+        setSenderId(senderId);
+    }
+
+    public TextMessage() {
+    }
+
     public String getText() {
         return text;
     }

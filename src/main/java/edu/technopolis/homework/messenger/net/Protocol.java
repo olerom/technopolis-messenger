@@ -11,4 +11,6 @@ public interface Protocol {
 
     byte[] encode(Message msg) throws ProtocolException;
 
+
+
 }

@@ -10,26 +10,14 @@ import java.util.Arrays;
  *
  */
 public class MessengerServer {
+    private static final int PORT = 19000;
 
     public static void main(String[] args) {
         try {
-            //Пример серверной обработки
-            Protocol protocol = new StringProtocol();
-            ServerSocket serverSocket = new ServerSocket(19000);
+            ServerSocket serverSocket = new ServerSocket(PORT);
             while (true) {
-                Socket client = serverSocket.accept();
-                InputStream inputStream = client.getInputStream();
-                while (true) {
-                    final byte[] buffer = new byte[1024 * 64];
-                    int read = inputStream.read(buffer);
-                    if (read > 0) {
-                        try {
-                            System.out.println(protocol.decode(Arrays.copyOf(buffer, read)));
-                        } catch (ProtocolException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
+                Socket socket = serverSocket.accept();
+                new Thread(new RunnableServerLogic(socket)).start();
             }
         } catch (IOException e) {
             e.printStackTrace();
