@@ -76,4 +76,9 @@ public class DatabaseImpl implements Database {
         executor.execUpdate("DROP TABLE if exists USER;");
     }
 
+    @Override
+    public Executor getExecutor(){
+        return this.executor;
+    }
+
 }

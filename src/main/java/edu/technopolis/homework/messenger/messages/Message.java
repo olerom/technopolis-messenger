@@ -7,24 +7,35 @@ import java.io.Serializable;
  */
 public abstract class Message implements Serializable {
 
-    private Long id;
-    private Long senderId;
+    private Long ownerId;
+    private Long receiverId;
     private Type type;
 
-    public Long getId() {
-        return id;
+    public Message(Long ownerId, Long receiverId, Type type) {
+        this.ownerId = ownerId;
+        this.receiverId = receiverId;
+        this.type = type;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Message(Long ownerId, Type type) {
+        this.ownerId = ownerId;
+        this.type = type;
     }
 
-    public Long getSenderId() {
-        return senderId;
+    public Long getOwnerId() {
+        return ownerId;
     }
 
-    public void setSenderId(Long senderId) {
-        this.senderId = senderId;
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public Long getReceiverId() {
+        return receiverId;
+    }
+
+    public void setReceiverId(Long receiverId) {
+        this.receiverId = receiverId;
     }
 
     public Type getType() {

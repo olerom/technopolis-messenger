@@ -20,8 +20,8 @@ public class StringProtocol implements Protocol {
         switch (type) {
             case MSG_TEXT:
                 TextMessage textMsg = new TextMessage();
-                textMsg.setSenderId(parseLong(tokens[1]));
-                textMsg.setText(tokens[2]);
+                textMsg.setReceiverId(parseLong(tokens[1]));
+                textMsg.setText(tokens[3]);
                 textMsg.setType(type);
                 return textMsg;
             default:
@@ -37,8 +37,13 @@ public class StringProtocol implements Protocol {
         switch (type) {
             case MSG_TEXT:
                 TextMessage sendMessage = (TextMessage) msg;
-                builder.append(String.valueOf(sendMessage.getSenderId())).append(DELIMITER);
+                builder.append(String.valueOf(sendMessage.getReceiverId())).append(DELIMITER);
+                builder.append(String.valueOf(sendMessage.getOwnerId())).append(DELIMITER);
                 builder.append(sendMessage.getText()).append(DELIMITER);
+                break;
+
+            case MSG_LOGIN:
+
                 break;
             default:
                 throw new ProtocolException("Invalid type: " + type);

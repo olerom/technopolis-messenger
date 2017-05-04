@@ -1,6 +1,7 @@
 package edu.technopolis.homework.messenger.store;
 
 import edu.technopolis.homework.messenger.messages.Message;
+import edu.technopolis.homework.messenger.store.executor.Executor;
 
 import java.util.List;
 
@@ -9,7 +10,13 @@ import java.util.List;
  *
  * @author olerom
  */
-public class MessageStoreImpl implements MessageStore{
+public class MessageStoreImpl implements MessageStore {
+
+    private final Executor executor;
+
+    public MessageStoreImpl(Executor executor) {
+        this.executor = executor;
+    }
 
     @Override
     public List<Long> getChatsByUserId(Long userId) {

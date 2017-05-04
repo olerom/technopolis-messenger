@@ -1,5 +1,7 @@
 package edu.technopolis.homework.messenger.store;
 
+import edu.technopolis.homework.messenger.store.executor.Executor;
+
 import java.sql.SQLException;
 
 /**
@@ -15,4 +17,6 @@ public interface Database {
     void dropMessages() throws SQLException;
 
     void dropUsers() throws SQLException;
+
+    Executor getExecutor();
 }

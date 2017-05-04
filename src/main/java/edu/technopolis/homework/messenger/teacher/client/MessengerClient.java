@@ -1,6 +1,8 @@
 package edu.technopolis.homework.messenger.teacher.client;
 
 
+import edu.technopolis.homework.messenger.User;
+import edu.technopolis.homework.messenger.messages.LoginMessage;
 import edu.technopolis.homework.messenger.messages.Message;
 import edu.technopolis.homework.messenger.messages.TextMessage;
 import edu.technopolis.homework.messenger.messages.Type;
@@ -29,6 +31,7 @@ public class MessengerClient {
     private Protocol protocol;
     private int port;
     private String host;
+    private User user;
 
     /**
      * С каждым сокетом связано 2 канала in/out
@@ -107,17 +110,15 @@ public class MessengerClient {
         String cmdType = tokens[0];
         switch (cmdType) {
             case "/login":
-                try {
+
+                if (tokens.length != 3) {
+                    System.out.println("Not enough arguments. Make sure that you mention login and password");
+                } else {
                     String login = tokens[1];
                     String password = tokens[2];
-                } catch (IndexOutOfBoundsException e){
-                    System.out.println("Not enough arguments. Make sure that you mention login and password");
+                    Message loginMessage = new LoginMessage(this.user, login, password);
+                    send(loginMessage);
                 }
-
-
-
-
-                // TODO: реализация
                 break;
             case "/help":
                 String printHelp = "/login <логин_пользователя> <пароль>\n" +
@@ -130,7 +131,7 @@ public class MessengerClient {
                 System.out.println(printHelp);
                 break;
             case "/text":
-                // FIXME: пример реализации для простого текстового сообщения
+
                 TextMessage sendMessage = new TextMessage(tokens[1], Type.MSG_TEXT, 0L, 1L);
                 sendMessage.setType(Type.MSG_TEXT);
                 sendMessage.setText(tokens[1]);
@@ -162,6 +163,7 @@ public class MessengerClient {
         client.setHost(HOST);
         client.setPort(PORT);
         client.setProtocol(new StringProtocol());
+
 
         try {
             client.initSocket();

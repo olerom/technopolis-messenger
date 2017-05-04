@@ -41,7 +41,7 @@ public class MessengerServer {
             while (true) {
                 Socket socket = serverSocket.accept();
 
-                Thread clientSocket = new Thread(new RunnableServerLogic(socket, database));
+                Thread clientSocket = new Thread(new RunnableServerLogic(socket, database.getExecutor()));
                 socketThreads.add(clientSocket);
                 clientSocket.start();
             }

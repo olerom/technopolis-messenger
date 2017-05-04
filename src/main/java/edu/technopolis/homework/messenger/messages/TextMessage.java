@@ -8,14 +8,9 @@ import java.util.Objects;
 public class TextMessage extends Message {
     private String text;
 
-    public TextMessage(String text, Type type, Long id, Long senderId) {
+    public TextMessage(Long ownerId, Long receiverId, String text) {
+        super(ownerId, receiverId, Type.MSG_TEXT);
         this.text = text;
-        setType(type);
-        setId(id);
-        setSenderId(senderId);
-    }
-
-    public TextMessage() {
     }
 
     public String getText() {
