@@ -61,7 +61,7 @@ public class Session {
     }
 
     public void send(Message msg) throws ProtocolException, IOException {
-        System.out.println("Send to " + msg.getOwnerId());
+        System.out.println("Send to " + msg.getReceiverId());
         out.write(protocol.encode(msg));
         out.flush();
     }
@@ -76,5 +76,9 @@ public class Session {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public User getUser() {
+        return this.user;
     }
 }

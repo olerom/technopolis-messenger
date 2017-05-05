@@ -1,5 +1,6 @@
 package edu.technopolis.homework.messenger.store;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import edu.technopolis.homework.messenger.messages.Message;
@@ -28,11 +29,11 @@ public interface MessageStore {
     /**
      * Добавить сообщение в чат
      */
-    void addMessage(Long chatId, Message message);
+    void addMessage(Long chatId, Message message) throws SQLException;
 
     /**
      * Добавить пользователя к чату
      */
-    void addUserToChat(Long userId, Long chatId);
+    void addUserToChat(Long userId, Long chatId) throws SQLException;
 
 }

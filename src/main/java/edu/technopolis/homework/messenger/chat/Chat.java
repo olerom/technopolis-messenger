@@ -12,9 +12,8 @@ import java.util.List;
  */
 public class Chat {
     private long id;
-    private List<Long> messages;
-    private List<Long> participants;
-    private User admin;
+    private List<Long> messageIds;
+    private List<Long> participantIds;
 
     public void addMessage(Message message) {
 

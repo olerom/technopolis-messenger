@@ -11,6 +11,7 @@ import edu.technopolis.homework.messenger.store.executor.Executor;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Date: 05.05.17
@@ -18,21 +19,27 @@ import java.sql.SQLException;
  * @author olerom
  */
 public class LoginCommand implements Command {
+
+//    TODO : fix
     @Override
-    public void execute(Session session, Message message, UserStore userStore, MessageStore messageStore) throws CommandException {
+    public void execute(Session session, Message message, UserStore userStore,
+                        MessageStore messageStore, ConcurrentLinkedQueue<Session> sessions) throws CommandException {
         LoginMessage loginMessage = (LoginMessage) message;
         User user;
         try {
             user = userStore.getUser(loginMessage.getLogin(), loginMessage.getPassword());
             session.setUser(user);
             message.setOwnerId(user.getId());
+            message.setReceiverId(user.getId());
         } catch (SQLException e) {
+
             User tmpUser = new User(-1L, loginMessage.getLogin(), loginMessage.getPassword());
             try {
                 userStore.addUser(tmpUser);
                 user = userStore.getUser(loginMessage.getLogin(), loginMessage.getPassword());
                 session.setUser(user);
                 message.setOwnerId(user.getId());
+                message.setReceiverId(user.getId());
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }

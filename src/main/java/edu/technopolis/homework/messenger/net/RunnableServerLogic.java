@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Date: 04.05.17
@@ -24,17 +25,21 @@ public class RunnableServerLogic implements Runnable {
     private Protocol protocol;
     private UserStore userStore;
     private MessageStore messageStore;
+    private ConcurrentLinkedQueue<Session> sessions;
 
-    public RunnableServerLogic(Socket clientSocket, Executor executor) {
+
+    public RunnableServerLogic(Socket clientSocket, Executor executor, ConcurrentLinkedQueue<Session> sessions) {
         this.clientSocket = clientSocket;
         this.protocol = new StringProtocol();
         this.userStore = new UserStoreImpl(executor);
         this.messageStore = new MessageStoreImpl(executor);
+        this.sessions = sessions;
     }
 
     @Override
     public void run() {
         Session session = new Session(clientSocket);
+        sessions.add(session);
         try {
             InputStream in = clientSocket.getInputStream();
             while (true) {
@@ -47,7 +52,7 @@ public class RunnableServerLogic implements Runnable {
 
                         Command command = new CommandFactory().get(msg.getType());
 
-                        command.execute(session, msg, userStore, messageStore);
+                        command.execute(session, msg, userStore, messageStore, sessions);
 
                     } catch (ProtocolException e) {
                         e.printStackTrace();

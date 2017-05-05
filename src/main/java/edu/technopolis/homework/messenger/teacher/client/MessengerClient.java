@@ -1,6 +1,7 @@
 package edu.technopolis.homework.messenger.teacher.client;
 
 
+import com.sun.org.apache.xpath.internal.SourceTree;
 import edu.technopolis.homework.messenger.User;
 import edu.technopolis.homework.messenger.messages.LoginMessage;
 import edu.technopolis.homework.messenger.messages.Message;
@@ -10,6 +11,7 @@ import edu.technopolis.homework.messenger.net.Protocol;
 import edu.technopolis.homework.messenger.net.ProtocolException;
 import edu.technopolis.homework.messenger.net.StringProtocol;
 
+import javax.xml.soap.Text;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -98,18 +100,21 @@ public class MessengerClient {
      */
     public void onMessage(Message msg) {
 
-        switch (msg.getType()){
+        switch (msg.getType()) {
             case MSG_LOGIN:
                 LoginMessage loginMessage = (LoginMessage) msg;
                 this.user = new User(loginMessage.getOwnerId(), loginMessage.getLogin(), loginMessage.getPassword());
 
-                System.out.println("Acc: " + user.toString());
-                System.out.println("You are logged in");
+                System.out.println("You are logged in, " + user.getLogin()
+                        + ". Your id is " + user.getId());
                 break;
             case MSG_TEXT:
+                TextMessage textMessage = (TextMessage) msg;
+                System.out.println("You received a new message from user with id = "
+                        + textMessage.getOwnerId()
+                        + ": " + textMessage.getText());
                 break;
         }
-        System.err.println("Message received:  " + msg);
     }
 
     /**
@@ -143,7 +148,6 @@ public class MessengerClient {
                 System.out.println(printHelp);
                 break;
             case "/text":
-
                 TextMessage textMessage = new TextMessage(user, Long.valueOf(tokens[1]), tokens[2]);
                 send(textMessage);
                 break;
@@ -158,7 +162,7 @@ public class MessengerClient {
      * Отправка сообщения в сокет клиент -> сервер
      */
     public void send(Message msg) throws IOException, ProtocolException {
-        System.out.println(msg);
+        System.err.println(msg);
         out.write(protocol.encode(msg));
         out.flush(); // принудительно проталкиваем буфер с данными
     }
