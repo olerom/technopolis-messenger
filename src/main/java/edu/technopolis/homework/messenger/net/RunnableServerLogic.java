@@ -1,6 +1,10 @@
 package edu.technopolis.homework.messenger.net;
 
 import edu.technopolis.homework.messenger.User;
+import edu.technopolis.homework.messenger.commands.Command;
+import edu.technopolis.homework.messenger.commands.CommandFactory;
+import edu.technopolis.homework.messenger.messages.LoginMessage;
+import edu.technopolis.homework.messenger.messages.Message;
 import edu.technopolis.homework.messenger.store.*;
 import edu.technopolis.homework.messenger.store.executor.Executor;
 
@@ -30,6 +34,7 @@ public class RunnableServerLogic implements Runnable {
 
     @Override
     public void run() {
+        Session session = new Session(clientSocket);
         try {
             InputStream in = clientSocket.getInputStream();
             while (true) {
@@ -37,13 +42,15 @@ public class RunnableServerLogic implements Runnable {
                 int read = in.read(buffer);
                 if (read > 0) {
                     try {
-                        userStore.addUser(new User(0, "oo", "oo"));
-                        System.out.println(userStore.getUser("oo", "oo"));
-                        System.out.println(protocol.decode(Arrays.copyOf(buffer, read)));
+
+                        Message msg = protocol.decode(Arrays.copyOf(buffer, read));
+
+                        Command command = new CommandFactory().get(msg.getType());
+
+                        command.execute(session, msg);
+
                     } catch (ProtocolException e) {
                         e.printStackTrace();
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
                     }
                 }
             }

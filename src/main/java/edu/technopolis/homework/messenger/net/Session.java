@@ -36,11 +36,15 @@ public class Session {
         this.user = user;
         this.socket = socket;
         this.protocol = new StringProtocol();
+    }
 
-
+    public Session(Socket socket) {
+        this.socket = socket;
+        this.protocol = new StringProtocol();
     }
 
     public void send(Message msg) throws ProtocolException, IOException {
+
         System.out.println("Send to " + msg.getOwnerId());
         out.write(protocol.encode(msg));
         out.flush();
@@ -52,5 +56,9 @@ public class Session {
 
     public void close() {
         // TODO: закрыть in/out каналы и сокет. Освободить другие ресурсы, если необходимо
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
