@@ -1,5 +1,7 @@
 package edu.technopolis.homework.messenger.messages;
 
+import edu.technopolis.homework.messenger.User;
+
 import java.util.Objects;
 
 /**
@@ -8,8 +10,11 @@ import java.util.Objects;
 public class TextMessage extends Message {
     private String text;
 
-    public TextMessage(Long ownerId, Long receiverId, String text) {
-        super(ownerId, receiverId, Type.MSG_TEXT);
+    public TextMessage() {
+    }
+
+    public TextMessage(User owner, Long receiverId, String text) {
+        super(owner, receiverId, Type.MSG_TEXT);
         this.text = text;
     }
 
@@ -45,6 +50,6 @@ public class TextMessage extends Message {
     public String toString() {
         return "TextMessage{" +
                 "text='" + text + '\'' +
-                '}';
+                '}' + "\n" + super.toString();
     }
 }

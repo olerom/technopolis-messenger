@@ -132,10 +132,8 @@ public class MessengerClient {
                 break;
             case "/text":
 
-                TextMessage sendMessage = new TextMessage(tokens[1], Type.MSG_TEXT, 0L, 1L);
-                sendMessage.setType(Type.MSG_TEXT);
-                sendMessage.setText(tokens[1]);
-                send(sendMessage);
+                TextMessage textMessage = new TextMessage(user, Long.valueOf(tokens[1]), tokens[2]);
+                send(textMessage);
                 break;
             // TODO: implement another types from wiki
 
@@ -154,10 +152,10 @@ public class MessengerClient {
     }
 
     public static void main(String[] args) throws Exception {
-        run(args);
+        new MessengerClient().run(args);
     }
 
-    private static void run(String[] args) throws Exception {
+    private void run(String[] args) throws Exception {
 
         MessengerClient client = new MessengerClient();
         client.setHost(HOST);

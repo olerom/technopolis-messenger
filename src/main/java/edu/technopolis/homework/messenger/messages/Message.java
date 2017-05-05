@@ -1,5 +1,7 @@
 package edu.technopolis.homework.messenger.messages;
 
+import edu.technopolis.homework.messenger.User;
+
 import java.io.Serializable;
 
 /**
@@ -11,14 +13,28 @@ public abstract class Message implements Serializable {
     private Long receiverId;
     private Type type;
 
-    public Message(Long ownerId, Long receiverId, Type type) {
-        this.ownerId = ownerId;
+    public Message(){
+
+    }
+
+    public Message(User owner, Long receiverId, Type type) {
+        if (owner != null)
+            this.ownerId = owner.getId();
+
         this.receiverId = receiverId;
         this.type = type;
     }
 
-    public Message(Long ownerId, Type type) {
-        this.ownerId = ownerId;
+    public Message(Long ownerid, Long receiverId, Type type) {
+        this.ownerId = ownerid;
+        this.receiverId = receiverId;
+        this.type = type;
+    }
+
+    public Message(User owner, Type type) {
+        if (owner != null)
+            this.ownerId = owner.getId();
+
         this.type = type;
     }
 
@@ -44,5 +60,14 @@ public abstract class Message implements Serializable {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "ownerId=" + ownerId +
+                ", receiverId=" + receiverId +
+                ", type=" + type +
+                '}';
     }
 }

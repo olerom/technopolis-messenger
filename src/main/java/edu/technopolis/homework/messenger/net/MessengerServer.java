@@ -36,13 +36,11 @@ public class MessengerServer {
 
         try {
             ServerSocket serverSocket = new ServerSocket(port);
-            List<Thread> socketThreads = new ArrayList<>();
 
             while (true) {
                 Socket socket = serverSocket.accept();
 
                 Thread clientSocket = new Thread(new RunnableServerLogic(socket, database.getExecutor()));
-                socketThreads.add(clientSocket);
                 clientSocket.start();
             }
 

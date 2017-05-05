@@ -24,14 +24,26 @@ public class Session {
     // сокет на клиента
     private Socket socket;
 
+    private Protocol protocol;
+
     /**
      * С каждым сокетом связано 2 канала in/out
      */
     private InputStream in;
     private OutputStream out;
 
+    public Session(User user, Socket socket) {
+        this.user = user;
+        this.socket = socket;
+        this.protocol = new StringProtocol();
+
+
+    }
+
     public void send(Message msg) throws ProtocolException, IOException {
-        // TODO: Отправить клиенту сообщение
+        System.out.println("Send to " + msg.getOwnerId());
+        out.write(protocol.encode(msg));
+        out.flush();
     }
 
     public void onMessage(Message msg) {
