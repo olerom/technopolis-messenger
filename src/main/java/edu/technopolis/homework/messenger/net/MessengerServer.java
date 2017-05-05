@@ -13,12 +13,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  *
  */
 public class MessengerServer {
     private int port;
+    private ConcurrentLinkedQueue<Session> sessions = new ConcurrentLinkedQueue<>();
 
     public static void main(String[] args) {
         new MessengerServer().run();
@@ -31,7 +33,9 @@ public class MessengerServer {
             database.initMessages();
             database.initUsers();
         } catch (SQLException e) {
+            System.out.println("Couldn't create tables");
             e.printStackTrace();
+            System.exit(1);
         }
 
         try {
@@ -58,7 +62,9 @@ public class MessengerServer {
             this.port = Integer.valueOf(properties.getProperty("port"));
 
         } catch (IOException e) {
+            System.out.println("Couldn't read properties");
             e.printStackTrace();
+            System.exit(1);
         }
     }
 }

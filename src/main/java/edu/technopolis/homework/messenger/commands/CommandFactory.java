@@ -11,11 +11,10 @@ import java.util.Map;
  * @author olerom
  */
 public class CommandFactory {
-    private Map<Type, Command> typeCommandMap = new HashMap<>();
-
-    public CommandFactory() {
-        typeCommandMap.put(Type.MSG_LOGIN, new LoginCommand());
-    }
+    private Map<Type, Command> typeCommandMap = new HashMap<Type, Command>() {{
+        put(Type.MSG_TEXT, new TextCommand());
+        put(Type.MSG_LOGIN, new LoginCommand());
+    }};
 
     public Command get(Type type) {
         return typeCommandMap.get(type);

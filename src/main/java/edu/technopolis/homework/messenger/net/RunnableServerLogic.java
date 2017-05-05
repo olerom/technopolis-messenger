@@ -47,7 +47,7 @@ public class RunnableServerLogic implements Runnable {
 
                         Command command = new CommandFactory().get(msg.getType());
 
-                        command.execute(session, msg);
+                        command.execute(session, msg, userStore, messageStore);
 
                     } catch (ProtocolException e) {
                         e.printStackTrace();

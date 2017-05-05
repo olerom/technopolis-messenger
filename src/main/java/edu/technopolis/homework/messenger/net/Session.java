@@ -35,16 +35,32 @@ public class Session {
     public Session(User user, Socket socket) {
         this.user = user;
         this.socket = socket;
+
+        try {
+            this.in = socket.getInputStream();
+            this.out = socket.getOutputStream();
+        } catch (IOException e) {
+            System.out.println("Could't get stream");
+            e.printStackTrace();
+            System.exit(1);
+        }
         this.protocol = new StringProtocol();
     }
 
     public Session(Socket socket) {
         this.socket = socket;
+        try {
+            this.in = socket.getInputStream();
+            this.out = socket.getOutputStream();
+        } catch (IOException e) {
+            System.out.println("Could't get stream");
+            e.printStackTrace();
+            System.exit(1);
+        }
         this.protocol = new StringProtocol();
     }
 
     public void send(Message msg) throws ProtocolException, IOException {
-
         System.out.println("Send to " + msg.getOwnerId());
         out.write(protocol.encode(msg));
         out.flush();

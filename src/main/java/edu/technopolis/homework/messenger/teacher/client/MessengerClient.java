@@ -97,6 +97,18 @@ public class MessengerClient {
      * Реагируем на входящее сообщение
      */
     public void onMessage(Message msg) {
+
+        switch (msg.getType()){
+            case MSG_LOGIN:
+                LoginMessage loginMessage = (LoginMessage) msg;
+                this.user = new User(loginMessage.getOwnerId(), loginMessage.getLogin(), loginMessage.getPassword());
+
+                System.out.println("Acc: " + user.toString());
+                System.out.println("You are logged in");
+                break;
+            case MSG_TEXT:
+                break;
+        }
         System.err.println("Message received:  " + msg);
     }
 
