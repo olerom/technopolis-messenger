@@ -11,34 +11,53 @@ import java.io.IOException;
  */
 public class StringProtocol implements Protocol {
 
-    public static final String DELIMITER = "~";
+    private static final String DELIMITER = "@@@";
+    private ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public Message decode(byte[] bytes) throws ProtocolException {
-        String str = new String(bytes);
-        System.out.println("decoded: " + str);
-        String[] tokens = str.split(DELIMITER);
+        String decodedString = new String(bytes);
+        System.err.println("Decoded: " + decodedString);
 
-        Type type = Type.valueOf(tokens[0]);
-        ObjectMapper mapper = new ObjectMapper();
+        String[] tokens = decodedString.split(DELIMITER);
+
+        if (tokens.length != 2) {
+            throw new ProtocolException("Invalid length of " + decodedString + ". Length should be 2.");
+        }
+
+        Type type;
+        try {
+            type = Type.valueOf(tokens[0]);
+        } catch (IllegalArgumentException e) {
+            throw new ProtocolException("Invalid type: " + tokens[0] +
+                    ". Should be from edu.technopolis.homework.messenger.messages package");
+        }
+
+        String jsonMessage = tokens[1];
         switch (type) {
             case MSG_TEXT:
                 try {
-                    return mapper.readValue(tokens[1], TextMessage.class);
+                    return mapper.readValue(jsonMessage, TextMessage.class);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    throw new ProtocolException("Cannot deserialize TextMessage from json: "
+                            + jsonMessage);
                 }
             case MSG_LOGIN:
                 try {
-                    return mapper.readValue(tokens[1], LoginMessage.class);
+                    return mapper.readValue(jsonMessage, LoginMessage.class);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    throw new ProtocolException("Cannot deserialize LoginMessage from json: "
+                            + jsonMessage);
                 }
             case MSG_CHAT_CREATE:
                 try {
-                    return mapper.readValue(tokens[1], ChatCreateMessage.class);
+                    return mapper.readValue(jsonMessage, ChatCreateMessage.class);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    throw new ProtocolException("Cannot deserialize ChatCreateMessage from json: "
+                            + jsonMessage);
                 }
             default:
                 throw new ProtocolException("Invalid type: " + type);
@@ -47,53 +66,55 @@ public class StringProtocol implements Protocol {
 
     @Override
     public byte[] encode(Message msg) throws ProtocolException {
-        StringBuilder builder = new StringBuilder();
+        StringBuilder encodedString = new StringBuilder();
+
         Type type = msg.getType();
-        builder.append(type).append(DELIMITER);
-        ObjectMapper mapper = new ObjectMapper();
+        encodedString.append(type).append(DELIMITER);
+
         switch (type) {
             case MSG_TEXT:
-                TextMessage sendMessage = (TextMessage) msg;
                 try {
-                    builder.append(mapper.writeValueAsString(sendMessage));
+                    TextMessage sendMessage = (TextMessage) msg;
+                    encodedString.append(mapper.writeValueAsString(sendMessage));
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
+                    throw new ProtocolException("Cant serialize TextMessage");
+                } catch (ClassCastException classCastException) {
+                    classCastException.printStackTrace();
+                    throw new ProtocolException("Can't cast Message to TextMessage");
                 }
                 break;
 
             case MSG_LOGIN:
-                LoginMessage loginMessage = (LoginMessage) msg;
                 try {
-                    builder.append(mapper.writeValueAsString(loginMessage));
+                    LoginMessage loginMessage = (LoginMessage) msg;
+                    encodedString.append(mapper.writeValueAsString(loginMessage));
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
+                    throw new ProtocolException("Cant serialize LoginMessage");
+                } catch (ClassCastException classCastException) {
+                    classCastException.printStackTrace();
+                    throw new ProtocolException("Can't cast Message to LoginMessage");
                 }
                 break;
 
             case MSG_CHAT_CREATE:
-                ChatCreateMessage chatCreateMessage = (ChatCreateMessage) msg;
                 try {
-                    builder.append(mapper.writeValueAsString(chatCreateMessage));
+                    ChatCreateMessage chatCreateMessage = (ChatCreateMessage) msg;
+                    encodedString.append(mapper.writeValueAsString(chatCreateMessage));
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
+                    throw new ProtocolException("Cant serialize ChatCreateMessage");
+                } catch (ClassCastException classCastException) {
+                    classCastException.printStackTrace();
+                    throw new ProtocolException("Can't cast Message to ChatCreateMessage");
                 }
                 break;
             default:
                 throw new ProtocolException("Invalid type: " + type);
-
-
         }
-        System.out.println("encoded: " + builder);
-        return builder.toString().getBytes();
-    }
 
-    private Long parseLong(String str) {
-        try {
-            return Long.parseLong(str);
-        } catch (Exception e) {
-            System.err.println("Error with parsing long");
-            e.printStackTrace();
-        }
-        return null;
+        System.err.println("Encoded: " + encodedString);
+        return encodedString.toString().getBytes();
     }
 }
