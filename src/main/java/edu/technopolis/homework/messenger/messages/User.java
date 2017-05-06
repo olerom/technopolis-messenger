@@ -1,4 +1,4 @@
-package edu.technopolis.homework.messenger;
+package edu.technopolis.homework.messenger.messages;
 
 /**
  *

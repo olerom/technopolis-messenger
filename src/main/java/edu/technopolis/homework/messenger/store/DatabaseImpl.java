@@ -58,7 +58,7 @@ public class DatabaseImpl implements Database {
 
     @Override
     public void initMessages() throws SQLException {
-        executor.execUpdate("CREATE TABLE if not exists USER_CHAT (id bigint auto_increment, user_id bigint, chat_id bigint, primary key (id));");
+        executor.execUpdate("CREATE TABLE if not exists USER_CHAT (user_id bigint, chat_id bigint, primary key (user_id, chat_id));");
         executor.execUpdate("CREATE TABLE if not exists MESSAGE (message_id bigint auto_increment, chat_id bigint, owner_id bigint, text varchar, primary key (message_id));");
     }
 

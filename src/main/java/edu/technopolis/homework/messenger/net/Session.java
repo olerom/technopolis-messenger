@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import edu.technopolis.homework.messenger.User;
+import edu.technopolis.homework.messenger.messages.User;
 import edu.technopolis.homework.messenger.messages.Message;
 
 /**

@@ -1,9 +1,7 @@
 package edu.technopolis.homework.messenger.net;
 
-import edu.technopolis.homework.messenger.User;
 import edu.technopolis.homework.messenger.commands.Command;
 import edu.technopolis.homework.messenger.commands.CommandFactory;
-import edu.technopolis.homework.messenger.messages.LoginMessage;
 import edu.technopolis.homework.messenger.messages.Message;
 import edu.technopolis.homework.messenger.store.*;
 import edu.technopolis.homework.messenger.store.executor.Executor;
@@ -54,7 +52,10 @@ public class RunnableServerLogic implements Runnable {
 
                         command.execute(session, msg, userStore, messageStore, sessions);
 
+                        System.out.println(messageStore.getChatById(msg.getReceiverId()));
                     } catch (ProtocolException e) {
+                        e.printStackTrace();
+                    } catch (SQLException e) {
                         e.printStackTrace();
                     }
                 }

@@ -1,17 +1,11 @@
 package edu.technopolis.homework.messenger.teacher.client;
 
 
-import com.sun.org.apache.xpath.internal.SourceTree;
-import edu.technopolis.homework.messenger.User;
-import edu.technopolis.homework.messenger.messages.LoginMessage;
-import edu.technopolis.homework.messenger.messages.Message;
-import edu.technopolis.homework.messenger.messages.TextMessage;
-import edu.technopolis.homework.messenger.messages.Type;
+import edu.technopolis.homework.messenger.messages.*;
 import edu.technopolis.homework.messenger.net.Protocol;
 import edu.technopolis.homework.messenger.net.ProtocolException;
 import edu.technopolis.homework.messenger.net.StringProtocol;
 
-import javax.xml.soap.Text;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -151,7 +145,15 @@ public class MessengerClient {
                 TextMessage textMessage = new TextMessage(user, Long.valueOf(tokens[1]), tokens[2]);
                 send(textMessage);
                 break;
-            // TODO: implement another types from wiki
+            case "/chat_create":
+                try {
+                    ChatCreateMessage chatCreateMessage = new ChatCreateMessage(user, tokens[1]);
+                    send(chatCreateMessage);
+                } catch (InstantiationException e) {
+                    System.out.println("Something went wrong with chat creation");
+                    e.printStackTrace();
+                }
+                break;
 
             default:
                 System.err.println("Invalid input: " + line);

@@ -1,6 +1,6 @@
 package edu.technopolis.homework.messenger.store;
 
-import edu.technopolis.homework.messenger.User;
+import edu.technopolis.homework.messenger.messages.User;
 import edu.technopolis.homework.messenger.store.executor.Executor;
 
 import java.sql.SQLException;

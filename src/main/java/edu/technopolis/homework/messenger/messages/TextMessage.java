@@ -1,7 +1,5 @@
 package edu.technopolis.homework.messenger.messages;
 
-import edu.technopolis.homework.messenger.User;
-
 import java.util.Objects;
 
 /**
@@ -15,6 +13,11 @@ public class TextMessage extends Message {
 
     public TextMessage(User owner, Long receiverId, String text) {
         super(owner, receiverId, Type.MSG_TEXT);
+        this.text = text;
+    }
+
+    public TextMessage(Long ownerId, Long receiverId, String text) {
+        super(ownerId, receiverId, Type.MSG_TEXT);
         this.text = text;
     }
 

@@ -1,7 +1,5 @@
 package edu.technopolis.homework.messenger.messages;
 
-import edu.technopolis.homework.messenger.User;
-
 /**
  * Date: 04.05.17
  *

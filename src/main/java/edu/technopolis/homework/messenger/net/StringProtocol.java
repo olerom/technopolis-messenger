@@ -2,11 +2,7 @@ package edu.technopolis.homework.messenger.net;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.technopolis.homework.messenger.User;
-import edu.technopolis.homework.messenger.messages.LoginMessage;
-import edu.technopolis.homework.messenger.messages.Message;
-import edu.technopolis.homework.messenger.messages.TextMessage;
-import edu.technopolis.homework.messenger.messages.Type;
+import edu.technopolis.homework.messenger.messages.*;
 
 import java.io.IOException;
 
@@ -38,6 +34,12 @@ public class StringProtocol implements Protocol {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            case MSG_CHAT_CREATE:
+                try {
+                    return mapper.readValue(tokens[1], ChatCreateMessage.class);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             default:
                 throw new ProtocolException("Invalid type: " + type);
         }
@@ -63,6 +65,15 @@ public class StringProtocol implements Protocol {
                 LoginMessage loginMessage = (LoginMessage) msg;
                 try {
                     builder.append(mapper.writeValueAsString(loginMessage));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            case MSG_CHAT_CREATE:
+                ChatCreateMessage chatCreateMessage = (ChatCreateMessage) msg;
+                try {
+                    builder.append(mapper.writeValueAsString(chatCreateMessage));
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }

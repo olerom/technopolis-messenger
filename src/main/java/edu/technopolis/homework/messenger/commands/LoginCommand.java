@@ -1,13 +1,12 @@
 package edu.technopolis.homework.messenger.commands;
 
-import edu.technopolis.homework.messenger.User;
+import edu.technopolis.homework.messenger.messages.User;
 import edu.technopolis.homework.messenger.messages.LoginMessage;
 import edu.technopolis.homework.messenger.messages.Message;
 import edu.technopolis.homework.messenger.net.ProtocolException;
 import edu.technopolis.homework.messenger.net.Session;
 import edu.technopolis.homework.messenger.store.MessageStore;
 import edu.technopolis.homework.messenger.store.UserStore;
-import edu.technopolis.homework.messenger.store.executor.Executor;
 
 import java.io.IOException;
 import java.sql.SQLException;

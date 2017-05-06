@@ -32,6 +32,8 @@ public class MessengerServer {
         try {
             database.initMessages();
             database.initUsers();
+//            database.dropMessages();
+//            database.dropUsers();
         } catch (SQLException e) {
             System.out.println("Couldn't create tables");
             e.printStackTrace();

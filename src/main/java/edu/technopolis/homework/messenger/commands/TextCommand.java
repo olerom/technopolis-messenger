@@ -1,7 +1,6 @@
 package edu.technopolis.homework.messenger.commands;
 
-import edu.technopolis.homework.messenger.User;
-import edu.technopolis.homework.messenger.messages.LoginMessage;
+import edu.technopolis.homework.messenger.messages.User;
 import edu.technopolis.homework.messenger.messages.Message;
 import edu.technopolis.homework.messenger.messages.TextMessage;
 import edu.technopolis.homework.messenger.net.ProtocolException;
@@ -27,6 +26,13 @@ public class TextCommand implements Command {
         TextMessage textMessage = (TextMessage) message;
         User user = session.getUser();
 
+        try {
+            messageStore.addMessage(textMessage.getReceiverId(), textMessage);
+        } catch (SQLException e) {
+            System.out.println("Can't add message to DB");
+            e.printStackTrace();
+        }
+
         for (Session session1 : sessions) {
             if (session1.getUser() != null && session1.getUser().getId() == message.getReceiverId()) {
                 try {
@@ -38,7 +44,6 @@ public class TextCommand implements Command {
                 }
             }
         }
-
 
         try {
             session.send(message);

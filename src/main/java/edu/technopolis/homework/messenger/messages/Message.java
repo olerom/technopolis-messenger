@@ -1,7 +1,5 @@
 package edu.technopolis.homework.messenger.messages;
 
-import edu.technopolis.homework.messenger.User;
-
 import java.io.Serializable;
 
 /**
