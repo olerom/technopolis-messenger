@@ -99,7 +99,7 @@ public class MessengerClient {
         switch (msg.getType()) {
             case MSG_LOGIN:
                 LoginMessage loginMessage = (LoginMessage) msg;
-                this.user = new User(loginMessage.getOwnerId(), loginMessage.getLogin(), loginMessage.getPassword());
+                this.user = new User(loginMessage.getSenderId(), loginMessage.getLogin(), loginMessage.getPassword());
 
                 System.out.println("You are logged in, " + user.getLogin()
                         + ". Your id is " + user.getId());
@@ -107,7 +107,7 @@ public class MessengerClient {
             case MSG_TEXT:
                 TextMessage textMessage = (TextMessage) msg;
                 System.out.println("You received a new message from chat "
-                        + textMessage.getOwnerId()
+                        + textMessage.getSenderId()
                         + ": " + textMessage.getText());
                 break;
 
@@ -181,7 +181,7 @@ public class MessengerClient {
                     send(chatCreateMessage);
                 } catch (InstantiationException e) {
                     e.printStackTrace();
-                    System.out.println("Can't create message. Whoops :(");
+                    System.out.println("Can't create message. Whoops! :(");
                 } catch (NumberFormatException numberFormatException) {
                     System.out.println("Can't parse participants ids");
                 }

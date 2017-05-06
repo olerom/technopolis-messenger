@@ -11,13 +11,13 @@ public class TextMessage extends Message {
     public TextMessage() {
     }
 
-    public TextMessage(User owner, Long receiverId, String text) {
-        super(owner, receiverId, Type.MSG_TEXT);
+    public TextMessage(User sender, Long chatId, String text) {
+        super(sender, chatId, Type.MSG_TEXT);
         this.text = text;
     }
 
-    public TextMessage(Long ownerId, Long receiverId, String text) {
-        super(ownerId, receiverId, Type.MSG_TEXT);
+    public TextMessage(Long senderId, Long chatId, String text) {
+        super(senderId, chatId, Type.MSG_TEXT);
         this.text = text;
     }
 

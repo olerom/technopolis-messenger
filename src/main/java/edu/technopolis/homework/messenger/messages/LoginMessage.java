@@ -14,15 +14,15 @@ public class LoginMessage extends Message {
 
     }
 
-    public LoginMessage(User owner, String login, String password) {
-        super(owner, Type.MSG_LOGIN);
+    public LoginMessage(User sender, String login, String password) {
+        super(sender, Type.MSG_LOGIN);
 
         this.login = login;
         this.password = password;
     }
 
-    public LoginMessage(Long ownerId, Long receiverId, Type type, String login, String password) {
-        super(ownerId, receiverId, Type.MSG_LOGIN);
+    public LoginMessage(Long senderId, Long chatId, Type type, String login, String password) {
+        super(senderId, chatId, Type.MSG_LOGIN);
 
         if (type != Type.MSG_LOGIN)
             System.out.println("Smth goes wrong");

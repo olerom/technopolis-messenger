@@ -28,8 +28,8 @@ public class LoginCommand implements Command {
         try {
             user = userStore.getUser(loginMessage.getLogin(), loginMessage.getPassword());
             session.setUser(user);
-            message.setOwnerId(user.getId());
-            message.setReceiverId(user.getId());
+            message.setSenderId(user.getId());
+            message.setChatId(user.getId());
         } catch (SQLException e) {
 
             User tmpUser = new User(-1L, loginMessage.getLogin(), loginMessage.getPassword());
@@ -37,8 +37,8 @@ public class LoginCommand implements Command {
                 userStore.addUser(tmpUser);
                 user = userStore.getUser(loginMessage.getLogin(), loginMessage.getPassword());
                 session.setUser(user);
-                message.setOwnerId(user.getId());
-                message.setReceiverId(user.getId());
+                message.setSenderId(user.getId());
+                message.setChatId(user.getId());
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }

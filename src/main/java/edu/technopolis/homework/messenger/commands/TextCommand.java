@@ -1,7 +1,6 @@
 package edu.technopolis.homework.messenger.commands;
 
 import edu.technopolis.homework.messenger.messages.StatusMessage;
-import edu.technopolis.homework.messenger.messages.User;
 import edu.technopolis.homework.messenger.messages.Message;
 import edu.technopolis.homework.messenger.messages.TextMessage;
 import edu.technopolis.homework.messenger.net.ProtocolException;
@@ -28,14 +27,14 @@ public class TextCommand implements Command {
         TextMessage textMessage = (TextMessage) message;
 
         try {
-            messageStore.addMessage(textMessage.getReceiverId(), textMessage);
+            messageStore.addMessage(textMessage.getChatId(), textMessage);
         } catch (SQLException e) {
             System.out.println("Can't add message to DB");
             e.printStackTrace();
         }
         try {
 
-            List<Long> recieverIds = messageStore.getUserIdsByChatId(message.getReceiverId());
+            List<Long> recieverIds = messageStore.getUserIdsByChatId(message.getChatId());
 
             for (Session session1 : sessions) {
                 for (long userId : recieverIds) {
@@ -55,7 +54,7 @@ public class TextCommand implements Command {
         }
 
         StatusMessage statusMessage = new StatusMessage("Your message is delivered to chat "
-                + message.getReceiverId());
+                + message.getChatId());
         try {
             session.send(statusMessage);
         } catch (ProtocolException e) {

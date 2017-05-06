@@ -96,7 +96,7 @@ public class MessageStoreImpl implements MessageStore {
     public void addMessage(Long chatId, Message message) throws SQLException {
         TextMessage textMessage = (TextMessage) message;
         executor.execUpdate("INSERT INTO MESSAGE (chat_id, owner_id, text) values ('"
-                + chatId + "', '" + message.getOwnerId() + "', '"
+                + chatId + "', '" + message.getSenderId() + "', '"
                 + textMessage.getText() + "')");
 
     }

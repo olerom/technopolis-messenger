@@ -7,49 +7,49 @@ import java.io.Serializable;
  */
 public abstract class Message implements Serializable {
 
-    private Long ownerId;
-    private Long receiverId;
+    private Long senderId;
+    private Long chatId;
     private Type type;
 
     public Message(){
 
     }
 
-    public Message(User owner, Long receiverId, Type type) {
-        if (owner != null)
-            this.ownerId = owner.getId();
+    public Message(User sender, Long chatId, Type type) {
+        if (sender != null)
+            this.senderId = sender.getId();
 
-        this.receiverId = receiverId;
+        this.chatId = chatId;
         this.type = type;
     }
 
-    public Message(Long ownerid, Long receiverId, Type type) {
-        this.ownerId = ownerid;
-        this.receiverId = receiverId;
+    public Message(Long senderId, Long chatId, Type type) {
+        this.senderId = senderId;
+        this.chatId = chatId;
         this.type = type;
     }
 
-    public Message(User owner, Type type) {
-        if (owner != null)
-            this.ownerId = owner.getId();
+    public Message(User sender, Type type) {
+        if (sender != null)
+            this.senderId = sender.getId();
 
         this.type = type;
     }
 
-    public Long getOwnerId() {
-        return ownerId;
+    public Long getSenderId() {
+        return senderId;
     }
 
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
+    public void setSenderId(Long senderId) {
+        this.senderId = senderId;
     }
 
-    public Long getReceiverId() {
-        return receiverId;
+    public Long getChatId() {
+        return chatId;
     }
 
-    public void setReceiverId(Long receiverId) {
-        this.receiverId = receiverId;
+    public void setChatId(Long chatId) {
+        this.chatId = chatId;
     }
 
     public Type getType() {
@@ -63,8 +63,8 @@ public abstract class Message implements Serializable {
     @Override
     public String toString() {
         return "Message{" +
-                "ownerId=" + ownerId +
-                ", receiverId=" + receiverId +
+                "senderId=" + senderId +
+                ", chatId=" + chatId +
                 ", type=" + type +
                 '}';
     }

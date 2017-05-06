@@ -20,7 +20,7 @@ public class ChatCreateCommand implements Command {
         ChatCreateMessage chatCreateMessage = (ChatCreateMessage) message;
 
         try {
-            messageStore.createChat(message.getOwnerId(), chatCreateMessage.getParticipants());
+            messageStore.createChat(message.getSenderId(), chatCreateMessage.getParticipants());
         } catch (SQLException e) {
             e.printStackTrace();
         }
