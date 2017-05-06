@@ -11,6 +11,7 @@ public class Chat {
     private long id;
     private List<Long> messageIds;
     private List<Long> participantIds;
+    private User admin;
 
     public Chat(long id, List<Long> messageIds, List<Long> participantIds) {
         this.id = id;

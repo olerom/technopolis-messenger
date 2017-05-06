@@ -1,9 +1,7 @@
 package edu.technopolis.homework.messenger.messages;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Date: 06.05.17
@@ -20,11 +18,9 @@ public class ChatCreateMessage extends Message {
     public ChatCreateMessage() {
     }
 
-    public ChatCreateMessage(User creator, String friends) throws InstantiationException {
+    public ChatCreateMessage(User creator, List<Long> participants) throws InstantiationException {
         super(creator, Type.MSG_CHAT_CREATE);
 
-        for (String participant : friends.split(",")) {
-            participants.add(Long.valueOf(participant));
-        }
+        this.participants = participants;
     }
 }

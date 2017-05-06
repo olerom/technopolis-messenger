@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -55,11 +57,11 @@ public class MessengerClient {
         return host;
     }
 
-    public void setHost(String host) {
+    private void setHost(String host) {
         this.host = host;
     }
 
-    public void initSocket() throws IOException {
+    private void initSocket() throws IOException {
         Socket socket = new Socket(host, port);
         in = socket.getInputStream();
         out = socket.getOutputStream();
@@ -92,7 +94,7 @@ public class MessengerClient {
     /**
      * Реагируем на входящее сообщение
      */
-    public void onMessage(Message msg) {
+    private void onMessage(Message msg) {
 
         switch (msg.getType()) {
             case MSG_LOGIN:
@@ -115,13 +117,12 @@ public class MessengerClient {
      * Обрабатывает входящую строку, полученную с консоли
      * Формат строки можно посмотреть в вики проекта
      */
-    public void processInput(String line) throws IOException, ProtocolException {
+    private void processInput(String line) throws IOException, ProtocolException {
         String[] tokens = line.split(" ");
-        System.out.println("Tokens: " + Arrays.toString(tokens));
+        System.err.println("Tokens: " + Arrays.toString(tokens));
         String cmdType = tokens[0];
         switch (cmdType) {
             case "/login":
-
                 if (tokens.length != 3) {
                     System.out.println("Not enough arguments. Make sure that you mention login and password");
                 } else {
@@ -132,27 +133,53 @@ public class MessengerClient {
                 }
                 break;
             case "/help":
-                String printHelp = "/login <логин_пользователя> <пароль>\n" +
-                        "/info [id]\n" +
-                        "/chat_list\n" +
-                        "/chat_create <user_id list>\n" +
-                        "/chat_history <chat_id>\n" +
-                        "/text <id> <message>\n";
-
+                String printHelp =
+                        "/help - показать список команд и общий хэлп по месседжеру\n" +
+                                "/login <логин_пользователя> <пароль> - залогиниться\n" +
+                                "/info [id] - получить всю информацию о пользователе, без аргументов - о себе\n" +
+                                "/chat_list - получить список чатов пользователя\n" +
+                                "/chat_create <user_id list> - создать новый чат, список пользователей приглашенных в чат\n" +
+                                "/chat_history <chat_id> - список сообщений из указанного чата\n" +
+                                "/text <id> <message> - отправить сообщение в заданный чат\n";
                 System.out.println(printHelp);
                 break;
             case "/text":
-                TextMessage textMessage = new TextMessage(user, Long.valueOf(tokens[1]), tokens[2]);
-                send(textMessage);
+
+                if (tokens.length < 3) {
+                    System.out.println("Not enough arguments. Make sure that you mention chat and text to this chat");
+                } else {
+                    try {
+                        long chatId = Long.valueOf(tokens[1]);
+
+                        StringBuilder text = new StringBuilder();
+                        for (int i = 2; i < text.length(); i++) {
+                            text.append(tokens[i]).append(" ");
+                        }
+
+                        TextMessage textMessage = new TextMessage(user, chatId, text.toString());
+                        send(textMessage);
+                    } catch (NumberFormatException e) {
+                        System.out.println();
+                    }
+                }
                 break;
             case "/chat_create":
                 try {
-                    ChatCreateMessage chatCreateMessage = new ChatCreateMessage(user, tokens[1]);
+                    List<Long> participants = new ArrayList<>();
+
+                    for (String participant : tokens[1].split(",")) {
+                        participants.add(Long.valueOf(participant));
+                    }
+
+                    ChatCreateMessage chatCreateMessage = new ChatCreateMessage(user, participants);
                     send(chatCreateMessage);
                 } catch (InstantiationException e) {
-                    System.out.println("Something went wrong with chat creation");
                     e.printStackTrace();
+                    System.out.println("Can't create message. Whoops :(");
+                } catch (NumberFormatException numberFormatException){
+                    System.out.println("Can't parse participants ids");
                 }
+
                 break;
 
             default:
@@ -163,7 +190,7 @@ public class MessengerClient {
     /**
      * Отправка сообщения в сокет клиент -> сервер
      */
-    public void send(Message msg) throws IOException, ProtocolException {
+    private void send(Message msg) throws IOException, ProtocolException {
         System.err.println(msg);
         out.write(protocol.encode(msg));
         out.flush(); // принудительно проталкиваем буфер с данными
@@ -175,14 +202,12 @@ public class MessengerClient {
 
     private void run(String[] args) throws Exception {
 
-        MessengerClient client = new MessengerClient();
-        client.setHost(HOST);
-        client.setPort(PORT);
-        client.setProtocol(new StringProtocol());
-
+        setHost(HOST);
+        setPort(PORT);
+        setProtocol(new StringProtocol());
 
         try {
-            client.initSocket();
+            initSocket();
             FastScanner scanner = new FastScanner();
 
             // Цикл чтения с консоли
@@ -193,7 +218,7 @@ public class MessengerClient {
                     return;
                 }
                 try {
-                    client.processInput(input);
+                    processInput(input);
                 } catch (ProtocolException | IOException e) {
                     System.err.println("Failed to process user input " + e);
                 }
@@ -201,7 +226,7 @@ public class MessengerClient {
         } catch (Exception e) {
             System.err.println("Application failed. " + e);
         } finally {
-            if (client != null) {
+            if (this != null) {
                 // TODO
 //                client.close();
             }
