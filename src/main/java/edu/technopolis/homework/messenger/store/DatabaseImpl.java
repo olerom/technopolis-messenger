@@ -20,7 +20,7 @@ public class DatabaseImpl implements Database {
 
     private String user;
     private String password;
-    private String dbname;
+    private String fullPath;
 
     private Executor executor;
 
@@ -31,7 +31,7 @@ public class DatabaseImpl implements Database {
 
             this.user = properties.getProperty("dbuser");
             this.password = properties.getProperty("dbpassword");
-            this.dbname = properties.getProperty("database");
+            this.fullPath = properties.getProperty("databaseUrl") + properties.getProperty("database");
 
             this.executor = new Executor(getH2Connection());
 
@@ -42,14 +42,12 @@ public class DatabaseImpl implements Database {
 
     private Connection getH2Connection() {
         try {
-            String url = "jdbc:h2:./" + this.dbname;
-
             JdbcDataSource jdbcDataSource = new JdbcDataSource();
-            jdbcDataSource.setURL(url);
+            jdbcDataSource.setURL(this.fullPath);
             jdbcDataSource.setUser(this.user);
             jdbcDataSource.setPassword(this.password);
 
-            return DriverManager.getConnection(url, this.user, this.password);
+            return DriverManager.getConnection(this.fullPath, this.user, this.password);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -58,7 +56,6 @@ public class DatabaseImpl implements Database {
 
     @Override
     public void initMessages() throws SQLException {
-        executor.execUpdate("CREATE TABLE if not exists USER_CHAT (user_id bigint, chat_id bigint, primary key (user_id, chat_id));");
         executor.execUpdate("CREATE TABLE if not exists MESSAGE (message_id bigint auto_increment, chat_id bigint, owner_id bigint, text varchar, primary key (message_id));");
     }
 
@@ -68,8 +65,17 @@ public class DatabaseImpl implements Database {
     }
 
     @Override
+    public void initUserChat() throws SQLException {
+        executor.execUpdate("CREATE TABLE if not exists USER_CHAT (user_id bigint, chat_id bigint, primary key (user_id, chat_id));");
+    }
+
+    @Override
+    public void initAdminChat() throws SQLException {
+        executor.execUpdate("CREATE TABLE if not exists ADMIN_CHAT (user_id bigint, chat_id bigint, primary key (user_id, chat_id));");
+    }
+
+    @Override
     public void dropMessages() throws SQLException {
-        executor.execUpdate("DROP TABLE if exists USER_CHAT;");
         executor.execUpdate("DROP TABLE if exists MESSAGE;");
     }
 
@@ -79,7 +85,17 @@ public class DatabaseImpl implements Database {
     }
 
     @Override
-    public Executor getExecutor(){
+    public void dropUserChat() throws SQLException {
+        executor.execUpdate("DROP TABLE if exists USER_CHAT;");
+    }
+
+    @Override
+    public void dropAdminChat() throws SQLException {
+        executor.execUpdate("DROP TABLE if exists ADMIN_CHAT;");
+    }
+
+    @Override
+    public Executor getExecutor() {
         return this.executor;
     }
 

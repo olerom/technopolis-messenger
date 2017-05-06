@@ -1,5 +1,6 @@
 package edu.technopolis.homework.messenger.commands;
 
+import edu.technopolis.homework.messenger.messages.StatusMessage;
 import edu.technopolis.homework.messenger.messages.User;
 import edu.technopolis.homework.messenger.messages.Message;
 import edu.technopolis.homework.messenger.messages.TextMessage;
@@ -10,6 +11,7 @@ import edu.technopolis.homework.messenger.store.UserStore;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -19,12 +21,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class TextCommand implements Command {
 
-//    Hollyshitt
+    //    Hollyshitt
     @Override
     public void execute(Session session, Message message, UserStore userStore,
                         MessageStore messageStore, ConcurrentLinkedQueue<Session> sessions) throws CommandException {
         TextMessage textMessage = (TextMessage) message;
-        User user = session.getUser();
 
         try {
             messageStore.addMessage(textMessage.getReceiverId(), textMessage);
@@ -32,21 +33,31 @@ public class TextCommand implements Command {
             System.out.println("Can't add message to DB");
             e.printStackTrace();
         }
+        try {
 
-        for (Session session1 : sessions) {
-            if (session1.getUser() != null && session1.getUser().getId() == message.getReceiverId()) {
-                try {
-                    session1.send(message);
-                } catch (ProtocolException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+            List<Long> recieverIds = messageStore.getUserIdsByChatId(message.getReceiverId());
+
+            for (Session session1 : sessions) {
+                for (long userId : recieverIds) {
+                    if (session1.getUser() != null && session1.getUser().getId() == userId) {
+                        try {
+                            session1.send(textMessage);
+                        } catch (ProtocolException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
+        StatusMessage statusMessage = new StatusMessage("Your message is delivered to chat "
+                + message.getReceiverId());
         try {
-            session.send(message);
+            session.send(statusMessage);
         } catch (ProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {

@@ -52,11 +52,11 @@ public class RunnableServerLogic implements Runnable {
 
                         command.execute(session, msg, userStore, messageStore, sessions);
 
-                        System.out.println(messageStore.getChatById(msg.getReceiverId()));
+//                        System.out.println(messageStore.getChatById(msg.getReceiverId()));
                     } catch (ProtocolException e) {
                         e.printStackTrace();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
+//                    } catch (SQLException e) {
+//                        e.printStackTrace();
                     }
                 }
             }

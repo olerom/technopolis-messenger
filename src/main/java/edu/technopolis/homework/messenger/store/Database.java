@@ -14,9 +14,17 @@ public interface Database {
 
     void initUsers() throws SQLException;
 
+    void initUserChat() throws SQLException;
+
+    void initAdminChat() throws SQLException;
+
     void dropMessages() throws SQLException;
 
     void dropUsers() throws SQLException;
+
+    void dropUserChat() throws SQLException;
+
+    void dropAdminChat() throws SQLException;
 
     Executor getExecutor();
 }

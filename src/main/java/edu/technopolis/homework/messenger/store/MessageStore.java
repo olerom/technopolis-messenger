@@ -8,12 +8,17 @@ import edu.technopolis.homework.messenger.messages.Message;
 
 public interface MessageStore {
     /**
-     * получаем список ид пользователей заданного чата
+     * Получаем список ид чатов заданного пользователя
      */
     List<Long> getChatsByUserId(Long userId) throws SQLException;
 
     /**
-     * получить информацию о чате
+     * Получаем список ид пользователей заданного чата
+     */
+    List<Long> getUserIdsByChatId(Long chatId) throws SQLException;
+
+    /**
+     * Получить информацию о чате
      */
     Chat getChatById(Long chatId) throws SQLException;
 
@@ -41,4 +46,9 @@ public interface MessageStore {
      * Создать чат от имени пользователя
      */
     void createChat(Long creatorId, List<Long> friends) throws SQLException;
+
+    /**
+     * Добавить админа чата в чат
+     */
+    void addAdminToChat(Long adminId, Long chatId) throws SQLException;
 }

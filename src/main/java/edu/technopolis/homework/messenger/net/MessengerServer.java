@@ -32,12 +32,15 @@ public class MessengerServer {
         try {
             database.initMessages();
             database.initUsers();
+            database.initUserChat();
+            database.initAdminChat();
 //            database.dropMessages();
 //            database.dropUsers();
         } catch (SQLException e) {
             System.out.println("Couldn't create tables");
             e.printStackTrace();
             System.exit(1);
+
         }
 
         try {

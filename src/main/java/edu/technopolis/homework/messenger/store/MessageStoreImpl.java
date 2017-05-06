@@ -35,6 +35,18 @@ public class MessageStoreImpl implements MessageStore {
     }
 
     @Override
+    public List<Long> getUserIdsByChatId(Long chatId) throws SQLException {
+        return executor.execQuery("SELECT user_id FROM USER_CHAT WHERE chat_id='" + chatId + '\'', result -> {
+            ArrayList<Long> users = new ArrayList<>();
+            while (!result.isLast()) {
+                result.next();
+                users.add((result.getLong(1)));
+            }
+            return users;
+        });
+    }
+
+    @Override
     public Chat getChatById(Long chatId) throws SQLException {
         ArrayList<Long> participants = new ArrayList<>();
 
@@ -98,14 +110,21 @@ public class MessageStoreImpl implements MessageStore {
     @Override
     public void createChat(Long creatorId, List<Long> friends) throws SQLException {
         long chatId = maxChatId();
+        chatId++;
 
-        executor.execUpdate("INSERT INTO USER_CHAT (user_id, chat_id) values ('"
+        executor.execUpdate("INSERT INTO ADMIN_CHAT (user_id, chat_id) values ('"
                 + creatorId + "', '" + chatId + "')");
 
         for (long friend : friends) {
             executor.execUpdate("INSERT INTO USER_CHAT (user_id, chat_id) values ('"
                     + friend + "', '" + chatId + "')");
         }
+    }
+
+    @Override
+    public void addAdminToChat(Long adminId, Long chatId) throws SQLException {
+        executor.execUpdate("INSERT INTO ADMIN_CHAT (user_id, chat_id) values ('"
+                + adminId + "', '" + chatId + "')");
     }
 
     private long maxChatId() {
@@ -119,4 +138,6 @@ public class MessageStoreImpl implements MessageStore {
             return 0L;
         }
     }
+
+
 }

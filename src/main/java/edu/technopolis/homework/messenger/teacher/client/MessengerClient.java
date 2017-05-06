@@ -106,9 +106,14 @@ public class MessengerClient {
                 break;
             case MSG_TEXT:
                 TextMessage textMessage = (TextMessage) msg;
-                System.out.println("You received a new message from user with id = "
+                System.out.println("You received a new message from chat "
                         + textMessage.getOwnerId()
                         + ": " + textMessage.getText());
+                break;
+
+            case MSG_STATUS:
+                StatusMessage statusMessage = (StatusMessage) msg;
+                System.out.println(statusMessage.getInfo());
                 break;
         }
     }
@@ -152,8 +157,9 @@ public class MessengerClient {
                         long chatId = Long.valueOf(tokens[1]);
 
                         StringBuilder text = new StringBuilder();
-                        for (int i = 2; i < text.length(); i++) {
-                            text.append(tokens[i]).append(" ");
+                        for (int i = 2; i < tokens.length; i++) {
+                            text.append(tokens[i]);
+                            text.append(" ");
                         }
 
                         TextMessage textMessage = new TextMessage(user, chatId, text.toString());
@@ -176,7 +182,7 @@ public class MessengerClient {
                 } catch (InstantiationException e) {
                     e.printStackTrace();
                     System.out.println("Can't create message. Whoops :(");
-                } catch (NumberFormatException numberFormatException){
+                } catch (NumberFormatException numberFormatException) {
                     System.out.println("Can't parse participants ids");
                 }
 

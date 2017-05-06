@@ -43,6 +43,7 @@ public class StringProtocol implements Protocol {
                     throw new ProtocolException("Cannot deserialize TextMessage from json: "
                             + jsonMessage);
                 }
+
             case MSG_LOGIN:
                 try {
                     return mapper.readValue(jsonMessage, LoginMessage.class);
@@ -51,6 +52,7 @@ public class StringProtocol implements Protocol {
                     throw new ProtocolException("Cannot deserialize LoginMessage from json: "
                             + jsonMessage);
                 }
+
             case MSG_CHAT_CREATE:
                 try {
                     return mapper.readValue(jsonMessage, ChatCreateMessage.class);
@@ -59,6 +61,16 @@ public class StringProtocol implements Protocol {
                     throw new ProtocolException("Cannot deserialize ChatCreateMessage from json: "
                             + jsonMessage);
                 }
+
+            case MSG_STATUS:
+                try {
+                    return mapper.readValue(jsonMessage, StatusMessage.class);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new ProtocolException("Cannot deserialize StatusMessage from json: "
+                            + jsonMessage);
+                }
+
             default:
                 throw new ProtocolException("Invalid type: " + type);
         }
@@ -108,6 +120,19 @@ public class StringProtocol implements Protocol {
                 } catch (ClassCastException classCastException) {
                     classCastException.printStackTrace();
                     throw new ProtocolException("Can't cast Message to ChatCreateMessage");
+                }
+                break;
+
+            case MSG_STATUS:
+                try {
+                    StatusMessage statusMessage = (StatusMessage) msg;
+                    encodedString.append(mapper.writeValueAsString(statusMessage));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                    throw new ProtocolException("Cant serialize StatusMessage");
+                } catch (ClassCastException classCastException) {
+                    classCastException.printStackTrace();
+                    throw new ProtocolException("Can't cast Message to StatusMessage");
                 }
                 break;
             default:
