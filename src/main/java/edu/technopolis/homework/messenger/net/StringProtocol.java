@@ -63,12 +63,22 @@ public class StringProtocol implements Protocol {
                             + jsonMessage);
                 }
 
+            case MSG_INFO_RESULT:
             case MSG_STATUS:
                 try {
                     return mapper.readValue(jsonMessage, StatusMessage.class);
                 } catch (IOException e) {
                     e.printStackTrace();
                     throw new ProtocolException("Cannot deserialize StatusMessage from json: "
+                            + jsonMessage);
+                }
+
+            case MSG_INFO:
+                try {
+                    return mapper.readValue(jsonMessage, UserInfoMessage.class);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new ProtocolException("Cannot deserialize UserInfoMessage from json: "
                             + jsonMessage);
                 }
 
@@ -125,6 +135,7 @@ public class StringProtocol implements Protocol {
                 }
                 break;
 
+            case MSG_INFO_RESULT:
             case MSG_STATUS:
                 try {
                     StatusMessage statusMessage = (StatusMessage) msg;
@@ -137,6 +148,20 @@ public class StringProtocol implements Protocol {
                     throw new ProtocolException("Can't cast Message to StatusMessage");
                 }
                 break;
+
+            case MSG_INFO:
+                try {
+                    UserInfoMessage userInfoMessage = (UserInfoMessage) msg;
+                    encodedString.append(mapper.writeValueAsString(userInfoMessage));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                    throw new ProtocolException("Cant serialize UserInfoMessage");
+                } catch (ClassCastException classCastException) {
+                    classCastException.printStackTrace();
+                    throw new ProtocolException("Can't cast Message to UserInfoMessage");
+                }
+                break;
+
             default:
                 throw new ProtocolException("Invalid type: " + type);
         }

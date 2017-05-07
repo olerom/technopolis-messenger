@@ -2,10 +2,13 @@ package edu.technopolis.homework.messenger.commands;
 
 import edu.technopolis.homework.messenger.messages.ChatCreateMessage;
 import edu.technopolis.homework.messenger.messages.Message;
+import edu.technopolis.homework.messenger.messages.StatusMessage;
+import edu.technopolis.homework.messenger.net.ProtocolException;
 import edu.technopolis.homework.messenger.net.Session;
 import edu.technopolis.homework.messenger.store.MessageStore;
 import edu.technopolis.homework.messenger.store.UserStore;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
 
@@ -18,6 +21,10 @@ public class ChatCreateCommand implements Command {
     @Override
     public void execute(Session session, Message message, UserStore userStore,
                         MessageStore messageStore, BlockingQueue<Session> sessions) throws CommandException {
+        if (!isLoggedIn(session)) {
+            return;
+        }
+
         try {
             ChatCreateMessage chatCreateMessage = (ChatCreateMessage) message;
 

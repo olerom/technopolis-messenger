@@ -1,10 +1,13 @@
 package edu.technopolis.homework.messenger.commands;
 
 import edu.technopolis.homework.messenger.messages.Message;
+import edu.technopolis.homework.messenger.messages.StatusMessage;
+import edu.technopolis.homework.messenger.net.ProtocolException;
 import edu.technopolis.homework.messenger.net.Session;
 import edu.technopolis.homework.messenger.store.MessageStore;
 import edu.technopolis.homework.messenger.store.UserStore;
 
+import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -25,4 +28,17 @@ public interface Command {
      * @throws CommandException - все исключения перебрасываются как CommandException
      */
     void execute(Session session, Message message, UserStore userStore, MessageStore messageStore, BlockingQueue<Session> sessions) throws CommandException;
+
+    default boolean isLoggedIn(Session session) {
+        if (session.getUser() == null) {
+            try {
+                session.send(new StatusMessage("You are not logged in"));
+                return false;
+            } catch (ProtocolException | IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return true;
+    }
 }

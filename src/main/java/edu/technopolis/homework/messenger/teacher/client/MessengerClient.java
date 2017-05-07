@@ -111,10 +111,12 @@ public class MessengerClient {
                         + ": " + textMessage.getText());
                 break;
 
+            case MSG_INFO_RESULT:
             case MSG_STATUS:
                 StatusMessage statusMessage = (StatusMessage) msg;
                 System.out.println(statusMessage.getInfo());
                 break;
+
         }
     }
 
@@ -171,21 +173,27 @@ public class MessengerClient {
                     }
                 }
                 break;
+
             case "/chat_create":
-                try {
-                    List<Long> participants = new ArrayList<>();
+                if (tokens.length < 3) {
+                    System.out.println("Not enough arguments");
+                } else {
+                    try {
+                        List<Long> participants = new ArrayList<>();
 
-                    for (String participant : tokens[1].split(",")) {
-                        participants.add(Long.valueOf(participant));
+                        for (String participant : tokens[1].split(",")) {
+                            participants.add(Long.valueOf(participant));
+                        }
+
+                        ChatCreateMessage chatCreateMessage = new ChatCreateMessage(user, participants);
+                        send(chatCreateMessage);
+
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                        System.out.println("Can't create message. Whoops! :(");
+                    } catch (NumberFormatException numberFormatException) {
+                        System.out.println("Can't parse participants ids");
                     }
-
-                    ChatCreateMessage chatCreateMessage = new ChatCreateMessage(user, participants);
-                    send(chatCreateMessage);
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                    System.out.println("Can't create message. Whoops! :(");
-                } catch (NumberFormatException numberFormatException) {
-                    System.out.println("Can't parse participants ids");
                 }
 
                 break;
@@ -200,6 +208,24 @@ public class MessengerClient {
                     loginMessage.setType(Type.MSG_REGISTER);
                     send(loginMessage);
                 }
+                break;
+
+            case "/info":
+
+                if (tokens.length > 2) {
+                    System.out.println("Too much arguments");
+                } else {
+                    try {
+                        Long userId = tokens.length == 2 ? Long.valueOf(tokens[1]) : null;
+
+                        UserInfoMessage userInfoMessage = new UserInfoMessage(user, userId);
+                        send(userInfoMessage);
+
+                    } catch (NumberFormatException numberFormatException) {
+                        System.out.println("Can't parse friend id");
+                    }
+                }
+
                 break;
 
             default:

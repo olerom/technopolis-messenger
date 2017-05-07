@@ -25,6 +25,9 @@ public class TextCommand implements Command {
     public void execute(Session session, Message message, UserStore userStore,
                         MessageStore messageStore, BlockingQueue<Session> sessions) throws CommandException {
         TextMessage textMessage = (TextMessage) message;
+        if (!isLoggedIn(session)) {
+            return;
+        }
 
         try {
             messageStore.addMessage(textMessage.getChatId(), textMessage);

@@ -16,6 +16,7 @@ public class CommandFactory {
         put(Type.MSG_LOGIN, new LoginCommand());
         put(Type.MSG_REGISTER, new RegisterCommand());
         put(Type.MSG_CHAT_CREATE, new ChatCreateCommand());
+        put(Type.MSG_INFO, new UserInfoCommand());
     }};
 
     public Command get(Type type) {
