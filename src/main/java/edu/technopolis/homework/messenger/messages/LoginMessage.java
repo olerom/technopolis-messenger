@@ -10,7 +10,7 @@ public class LoginMessage extends Message {
     private String login;
     private String password;
 
-    public LoginMessage(){
+    public LoginMessage() {
 
     }
 
@@ -19,6 +19,13 @@ public class LoginMessage extends Message {
 
         this.login = login;
         this.password = password;
+    }
+
+    public LoginMessage(User sender) {
+        super(sender, Type.MSG_LOGIN);
+
+        this.login = sender.getLogin();
+        this.password = sender.getPassword();
     }
 
     public LoginMessage(Long senderId, Long chatId, Type type, String login, String password) {

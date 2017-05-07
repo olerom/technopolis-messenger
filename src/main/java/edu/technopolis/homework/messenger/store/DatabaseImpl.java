@@ -61,7 +61,7 @@ public class DatabaseImpl implements Database {
 
     @Override
     public void initUsers() throws SQLException {
-        executor.execUpdate("CREATE TABLE if not exists USER (id bigint auto_increment, user_login varchar(30), user_password varchar(30), primary key (id));");
+        executor.execUpdate("CREATE TABLE if not exists USER (id bigint auto_increment, user_login varchar(30), user_password varchar(30), primary key (id), unique (user_login));");
     }
 
     @Override

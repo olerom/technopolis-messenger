@@ -7,7 +7,7 @@ import edu.technopolis.homework.messenger.store.MessageStore;
 import edu.technopolis.homework.messenger.store.UserStore;
 
 import java.sql.SQLException;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * Date: 06.05.17
@@ -16,11 +16,14 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class ChatCreateCommand implements Command {
     @Override
-    public void execute(Session session, Message message, UserStore userStore, MessageStore messageStore, ConcurrentLinkedQueue<Session> sessions) throws CommandException {
-        ChatCreateMessage chatCreateMessage = (ChatCreateMessage) message;
-
+    public void execute(Session session, Message message, UserStore userStore,
+                        MessageStore messageStore, BlockingQueue<Session> sessions) throws CommandException {
         try {
+            ChatCreateMessage chatCreateMessage = (ChatCreateMessage) message;
+
             messageStore.createChat(message.getSenderId(), chatCreateMessage.getParticipants());
+        } catch (ClassCastException e) {
+            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -23,10 +24,10 @@ public class RunnableServerLogic implements Runnable {
     private Protocol protocol;
     private UserStore userStore;
     private MessageStore messageStore;
-    private ConcurrentLinkedQueue<Session> sessions;
+    private BlockingQueue<Session> sessions;
 
 
-    public RunnableServerLogic(Socket clientSocket, Executor executor, ConcurrentLinkedQueue<Session> sessions) {
+    public RunnableServerLogic(Socket clientSocket, Executor executor, BlockingQueue<Session> sessions) {
         this.clientSocket = clientSocket;
         this.protocol = new StringProtocol();
         this.userStore = new UserStoreImpl(executor);

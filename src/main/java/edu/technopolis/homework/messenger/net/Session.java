@@ -61,7 +61,8 @@ public class Session {
     }
 
     public void send(Message msg) throws ProtocolException, IOException {
-        System.out.println("Send to " + msg.getChatId());
+        System.out.println("Sending info: {chat=" + msg.getChatId()
+                + ", senderId=" + msg.getSenderId() + "}");
         out.write(protocol.encode(msg));
         out.flush();
     }

@@ -45,6 +45,7 @@ public class StringProtocol implements Protocol {
                 }
 
             case MSG_LOGIN:
+            case MSG_REGISTER:
                 try {
                     return mapper.readValue(jsonMessage, LoginMessage.class);
                 } catch (IOException e) {
@@ -98,6 +99,7 @@ public class StringProtocol implements Protocol {
                 break;
 
             case MSG_LOGIN:
+            case MSG_REGISTER:
                 try {
                     LoginMessage loginMessage = (LoginMessage) msg;
                     encodedString.append(mapper.writeValueAsString(loginMessage));

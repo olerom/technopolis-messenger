@@ -1,5 +1,6 @@
 package edu.technopolis.homework.messenger.commands;
 
+import edu.technopolis.homework.messenger.messages.StatusMessage;
 import edu.technopolis.homework.messenger.messages.User;
 import edu.technopolis.homework.messenger.messages.LoginMessage;
 import edu.technopolis.homework.messenger.messages.Message;
@@ -8,8 +9,10 @@ import edu.technopolis.homework.messenger.net.Session;
 import edu.technopolis.homework.messenger.store.MessageStore;
 import edu.technopolis.homework.messenger.store.UserStore;
 
+import javax.swing.text.BadLocationException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -19,38 +22,31 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class LoginCommand implements Command {
 
-//    TODO : fix
+    //    TODO : fix
     @Override
     public void execute(Session session, Message message, UserStore userStore,
-                        MessageStore messageStore, ConcurrentLinkedQueue<Session> sessions) throws CommandException {
-        LoginMessage loginMessage = (LoginMessage) message;
-        User user;
-        try {
-            user = userStore.getUser(loginMessage.getLogin(), loginMessage.getPassword());
-            session.setUser(user);
-            message.setSenderId(user.getId());
-            message.setChatId(user.getId());
-        } catch (SQLException e) {
+                        MessageStore messageStore, BlockingQueue<Session> sessions) throws CommandException {
 
-            User tmpUser = new User(-1L, loginMessage.getLogin(), loginMessage.getPassword());
+        try {
+            LoginMessage loginMessage = (LoginMessage) message;
+            User user = userStore.getUser(loginMessage.getLogin(), loginMessage.getPassword());
+            session.setUser(user);
+            loginMessage.setSenderId(user.getId());
+
+            session.send(loginMessage);
+        } catch (SQLException e) {
+            StatusMessage statusMessage = new StatusMessage(
+                    "Can't find user with this login and password");
+
             try {
-                userStore.addUser(tmpUser);
-                user = userStore.getUser(loginMessage.getLogin(), loginMessage.getPassword());
-                session.setUser(user);
-                message.setSenderId(user.getId());
-                message.setChatId(user.getId());
-            } catch (SQLException e1) {
+                session.send(statusMessage);
+            } catch (ProtocolException e1) {
+                e1.printStackTrace();
+            } catch (IOException e1) {
                 e1.printStackTrace();
             }
 
-        }
-
-
-        try {
-            session.send(message);
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (ProtocolException | IOException e) {
             e.printStackTrace();
         }
     }

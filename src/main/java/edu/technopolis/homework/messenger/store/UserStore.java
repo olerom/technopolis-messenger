@@ -26,5 +26,5 @@ public interface UserStore {
      * Получить пользователя по id, например запрос информации/профиля
      * return null if user not found
      */
-    User getUserById(Long id);
+    User getUserById(Long id) throws SQLException;
 }

@@ -22,7 +22,7 @@ public class UserStoreImpl implements UserStore {
     public User addUser(User user) throws SQLException {
         executor.execUpdate("INSERT INTO USER (user_login, user_password) values ('"
                 + user.getLogin() + "', '" + user.getPassword() + "')");
-        return user;
+        return getUser(user.getLogin(), user.getPassword());
     }
 
     @Override
@@ -41,7 +41,11 @@ public class UserStoreImpl implements UserStore {
     }
 
     @Override
-    public User getUserById(Long id) {
-        return null;
+    public User getUserById(Long id) throws SQLException {
+        return executor.execQuery("SELECT * FROM USER WHERE user_id='" + id + '\'', result -> {
+            result.next();
+            return new User(result.getLong(1),
+                    result.getString(2), result.getString(3));
+        });
     }
 }

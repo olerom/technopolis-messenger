@@ -141,11 +141,13 @@ public class MessengerClient {
                 String printHelp =
                         "/help - показать список команд и общий хэлп по месседжеру\n" +
                                 "/login <логин_пользователя> <пароль> - залогиниться\n" +
+                                "/register <логин_пользователя> <пароль> - зарегистрироваться\n" +
                                 "/info [id] - получить всю информацию о пользователе, без аргументов - о себе\n" +
                                 "/chat_list - получить список чатов пользователя\n" +
                                 "/chat_create <user_id list> - создать новый чат, список пользователей приглашенных в чат\n" +
                                 "/chat_history <chat_id> - список сообщений из указанного чата\n" +
-                                "/text <id> <message> - отправить сообщение в заданный чат\n";
+                                "/text <id> <message> - отправить сообщение в заданный чат\n" +
+                                "/q - выйти\n";
                 System.out.println(printHelp);
                 break;
             case "/text":
@@ -188,6 +190,18 @@ public class MessengerClient {
 
                 break;
 
+            case "/register":
+                if (tokens.length != 3) {
+                    System.out.println("Not enough arguments. Make sure that you mention login and password");
+                } else {
+                    String login = tokens[1];
+                    String password = tokens[2];
+                    Message loginMessage = new LoginMessage(this.user, login, password);
+                    loginMessage.setType(Type.MSG_REGISTER);
+                    send(loginMessage);
+                }
+                break;
+
             default:
                 System.err.println("Invalid input: " + line);
         }
@@ -220,7 +234,8 @@ public class MessengerClient {
             System.out.println("$");
             while (true) {
                 String input = scanner.readLine();
-                if ("q".equals(input)) {
+                if ("/q".equals(input)) {
+                    scanner.close();
                     return;
                 }
                 try {

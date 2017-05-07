@@ -1,7 +1,7 @@
 package edu.technopolis.homework.messenger.commands;
 
-import edu.technopolis.homework.messenger.messages.StatusMessage;
 import edu.technopolis.homework.messenger.messages.Message;
+import edu.technopolis.homework.messenger.messages.StatusMessage;
 import edu.technopolis.homework.messenger.messages.TextMessage;
 import edu.technopolis.homework.messenger.net.ProtocolException;
 import edu.technopolis.homework.messenger.net.Session;
@@ -11,7 +11,7 @@ import edu.technopolis.homework.messenger.store.UserStore;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * Date: 05.05.17
@@ -20,10 +20,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class TextCommand implements Command {
 
-    //    Hollyshitt
+    //    Looks really ugly
     @Override
     public void execute(Session session, Message message, UserStore userStore,
-                        MessageStore messageStore, ConcurrentLinkedQueue<Session> sessions) throws CommandException {
+                        MessageStore messageStore, BlockingQueue<Session> sessions) throws CommandException {
         TextMessage textMessage = (TextMessage) message;
 
         try {
@@ -36,11 +36,12 @@ public class TextCommand implements Command {
 
             List<Long> recieverIds = messageStore.getUserIdsByChatId(message.getChatId());
 
-            for (Session session1 : sessions) {
+//          ¯\_(ツ)_/¯
+            for (Session participantSession : sessions) {
                 for (long userId : recieverIds) {
-                    if (session1.getUser() != null && session1.getUser().getId() == userId) {
+                    if (participantSession.getUser() != null && participantSession.getUser().getId() == userId) {
                         try {
-                            session1.send(textMessage);
+                            participantSession.send(textMessage);
                         } catch (ProtocolException e) {
                             e.printStackTrace();
                         } catch (IOException e) {

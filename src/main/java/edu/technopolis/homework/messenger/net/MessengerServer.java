@@ -9,26 +9,49 @@ import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  *
  */
 public class MessengerServer {
     private int port;
-    private ConcurrentLinkedQueue<Session> sessions = new ConcurrentLinkedQueue<>();
+    private BlockingQueue<Session> sessions = new ArrayBlockingQueue<>(100);
+    private ServerSocket serverSocket;
 
-    public static void main(String[] args) {
-        new MessengerServer().run();
+    public void setPort(int port) {
+        this.port = port;
     }
 
-    private void run() {
+    public void setSessions(BlockingQueue<Session> sessions) {
+        this.sessions = sessions;
+    }
+
+    private void setServerSocket(ServerSocket serverSocket) {
+        this.serverSocket = serverSocket;
+    }
+
+    private ServerSocket getServerSocket() {
+        return serverSocket;
+    }
+
+    private BlockingQueue<Session> getSessions() {
+        return sessions;
+    }
+
+    public static void main(String[] args) {
+        MessengerServer messengerServer = new MessengerServer();
+        messengerServer.startUp();
+    }
+
+    public void startUp() {
         initPort();
         Database database = new DatabaseImpl();
+
         try {
             database.initMessages();
             database.initUsers();
@@ -36,21 +59,22 @@ public class MessengerServer {
             database.initAdminChat();
 //            database.dropMessages();
 //            database.dropUsers();
+//            database.dropUserChat();
+//            database.dropAdminChat();
         } catch (SQLException e) {
-            System.out.println("Couldn't create tables");
+            System.out.println("Couldn't create tables. Quitting...");
             e.printStackTrace();
             System.exit(1);
-
         }
 
         try {
-            ServerSocket serverSocket = new ServerSocket(port);
-
+            setServerSocket(new ServerSocket(port));
+            ExecutorService executorService = Executors.newCachedThreadPool();
             while (true) {
-                Socket socket = serverSocket.accept();
+                Socket socket = getServerSocket().accept();
 
-                Thread clientSocket = new Thread(new RunnableServerLogic(socket, database.getExecutor(), sessions));
-                clientSocket.start();
+                executorService.submit(new Thread(new RunnableServerLogic(socket,
+                        database.getExecutor(), getSessions())));
             }
 
         } catch (IOException e) {

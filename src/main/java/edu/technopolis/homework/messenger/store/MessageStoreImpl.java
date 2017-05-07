@@ -68,7 +68,12 @@ public class MessageStoreImpl implements MessageStore {
             return null;
         });
 
-        return new Chat(chatId, messages, participants);
+        long adminId = executor.execQuery("SELECT user_id FROM ADMIN_CHAT WHERE chat_id='" + chatId + '\'', result -> {
+            result.next();
+            return (result.getLong(1));
+        });
+
+        return new Chat(chatId, messages, participants, adminId);
     }
 
     @Override

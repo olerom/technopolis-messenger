@@ -11,12 +11,13 @@ public class Chat {
     private long id;
     private List<Long> messageIds;
     private List<Long> participantIds;
-    private User admin;
+    private long adminId;
 
-    public Chat(long id, List<Long> messageIds, List<Long> participantIds) {
+    public Chat(long id, List<Long> messageIds, List<Long> participantIds, long adminId) {
         this.id = id;
         this.messageIds = messageIds;
         this.participantIds = participantIds;
+        this.adminId = adminId;
     }
 
     public void addMessage(Message message) {

@@ -5,6 +5,7 @@ import edu.technopolis.homework.messenger.net.Session;
 import edu.technopolis.homework.messenger.store.MessageStore;
 import edu.technopolis.homework.messenger.store.UserStore;
 
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -23,5 +24,5 @@ public interface Command {
      * @param message - сообщение для обработки
      * @throws CommandException - все исключения перебрасываются как CommandException
      */
-    void execute(Session session, Message message, UserStore userStore, MessageStore messageStore, ConcurrentLinkedQueue<Session> sessions) throws CommandException;
+    void execute(Session session, Message message, UserStore userStore, MessageStore messageStore, BlockingQueue<Session> sessions) throws CommandException;
 }
