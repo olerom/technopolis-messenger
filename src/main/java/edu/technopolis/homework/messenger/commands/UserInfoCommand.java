@@ -16,8 +16,15 @@ import java.util.concurrent.BlockingQueue;
  * @author olerom
  */
 public class UserInfoCommand implements Command {
+
+    private UserStore userStore;
+
+    public UserInfoCommand(UserStore userStore) {
+        this.userStore = userStore;
+    }
+
     @Override
-    public void execute(Session session, Message message, UserStore userStore, MessageStore messageStore, BlockingQueue<Session> sessions) throws CommandException {
+    public void execute(Session session, Message message, BlockingQueue<Session> sessions) throws CommandException {
         if (!isLoggedIn(session)) {
             return;
         }

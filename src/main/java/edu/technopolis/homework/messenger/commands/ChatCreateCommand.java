@@ -18,9 +18,15 @@ import java.util.concurrent.BlockingQueue;
  * @author olerom
  */
 public class ChatCreateCommand implements Command {
+
+    private MessageStore messageStore;
+
+    public ChatCreateCommand(MessageStore messageStore) {
+        this.messageStore = messageStore;
+    }
+
     @Override
-    public void execute(Session session, Message message, UserStore userStore,
-                        MessageStore messageStore, BlockingQueue<Session> sessions) throws CommandException {
+    public void execute(Session session, Message message, BlockingQueue<Session> sessions) throws CommandException {
         if (!isLoggedIn(session)) {
             return;
         }

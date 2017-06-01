@@ -20,10 +20,15 @@ import java.util.concurrent.BlockingQueue;
  */
 public class TextCommand implements Command {
 
+    private MessageStore messageStore;
+
+    public TextCommand(MessageStore messageStore) {
+        this.messageStore = messageStore;
+    }
+
     //    Looks really ugly
     @Override
-    public void execute(Session session, Message message, UserStore userStore,
-                        MessageStore messageStore, BlockingQueue<Session> sessions) throws CommandException {
+    public void execute(Session session, Message message, BlockingQueue<Session> sessions) throws CommandException {
         TextMessage textMessage = (TextMessage) message;
         if (!isLoggedIn(session)) {
             return;

@@ -27,7 +27,7 @@ public interface Command {
      * @param message - сообщение для обработки
      * @throws CommandException - все исключения перебрасываются как CommandException
      */
-    void execute(Session session, Message message, UserStore userStore, MessageStore messageStore, BlockingQueue<Session> sessions) throws CommandException;
+    void execute(Session session, Message message, BlockingQueue<Session> sessions) throws CommandException;
 
     default boolean isLoggedIn(Session session) {
         if (session.getUser() == null) {

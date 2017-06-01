@@ -49,9 +49,9 @@ public class RunnableServerLogic implements Runnable {
 
                         Message msg = protocol.decode(Arrays.copyOf(buffer, read));
 
-                        Command command = new CommandFactory().get(msg.getType());
+                        Command command = new CommandFactory(userStore, messageStore).get(msg.getType());
 
-                        command.execute(session, msg, userStore, messageStore, sessions);
+                        command.execute(session, msg, sessions);
 
 //                        System.out.println(messageStore.getChatById(msg.getChatId()));
                     } catch (ProtocolException e) {

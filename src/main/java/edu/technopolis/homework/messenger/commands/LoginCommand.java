@@ -21,11 +21,15 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author olerom
  */
 public class LoginCommand implements Command {
+    private UserStore userStore;
+
+    public LoginCommand(UserStore userStore) {
+        this.userStore = userStore;
+    }
 
     //    TODO : fix
     @Override
-    public void execute(Session session, Message message, UserStore userStore,
-                        MessageStore messageStore, BlockingQueue<Session> sessions) throws CommandException {
+    public void execute(Session session, Message message, BlockingQueue<Session> sessions) throws CommandException {
 
         try {
             LoginMessage loginMessage = (LoginMessage) message;
