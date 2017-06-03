@@ -3,7 +3,6 @@ package edu.technopolis.homework.messenger.commands;
 import edu.technopolis.homework.messenger.messages.ChatCreateMessage;
 import edu.technopolis.homework.messenger.messages.Message;
 import edu.technopolis.homework.messenger.net.Session;
-import edu.technopolis.homework.messenger.net.SessionImpl;
 import edu.technopolis.homework.messenger.store.MessageStore;
 
 import java.sql.SQLException;

@@ -117,6 +117,17 @@ public class MessengerClient {
                 System.out.println(statusMessage.getInfo());
                 break;
 
+            case MSG_CHAT_LIST_RESULT:
+                ChatListResultMessage message = (ChatListResultMessage) msg;
+                StringBuilder chats = new StringBuilder();
+                chats.append("Your chats: ");
+
+                for (Long chatId : message.getChats()) {
+                    chats.append(chatId).append(" ");
+                }
+
+                System.out.println(chats.toString());
+
         }
     }
 
@@ -166,7 +177,7 @@ public class MessengerClient {
                             text.append(" ");
                         }
 
-                        if (text.toString().length() > 200){
+                        if (text.toString().length() > 200) {
                             System.out.println("Your text is too big. Notice that 200 symbols is max number of them.");
                         }
 
@@ -227,6 +238,26 @@ public class MessengerClient {
 
                     } catch (NumberFormatException numberFormatException) {
                         System.out.println("Can't parse friend id");
+                    }
+                }
+
+                break;
+
+            case "/chat_list":
+
+                if (tokens.length > 2) {
+                    System.out.println("Too much arguments. They are redundant.");
+                } else {
+                    try {
+
+                        ChatListMessage chatListMessage = new ChatListMessage(this.user);
+                        send(chatListMessage);
+
+                    } catch (NumberFormatException numberFormatException) {
+                        System.out.println("Can't parse friend id");
+                    } catch (InstantiationException e) {
+                        System.out.println("Something went wrong.");
+                        e.printStackTrace();
                     }
                 }
 

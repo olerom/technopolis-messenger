@@ -1,5 +1,6 @@
-package edu.technopolis.homework.messenger.net;
+package edu.technopolis.homework.messenger.net.servers.blocking;
 
+import edu.technopolis.homework.messenger.net.Session;
 import edu.technopolis.homework.messenger.store.Database;
 import edu.technopolis.homework.messenger.store.DatabaseImpl;
 

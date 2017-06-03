@@ -1,9 +1,12 @@
-package edu.technopolis.homework.messenger.net;
+package edu.technopolis.homework.messenger.net.servers.nonblocking;
 
 
 import edu.technopolis.homework.messenger.commands.Command;
 import edu.technopolis.homework.messenger.commands.CommandFactory;
 import edu.technopolis.homework.messenger.messages.Message;
+import edu.technopolis.homework.messenger.net.ProtocolException;
+import edu.technopolis.homework.messenger.net.Session;
+import edu.technopolis.homework.messenger.net.StringProtocol;
 import edu.technopolis.homework.messenger.store.*;
 
 import java.io.IOException;
@@ -120,7 +123,7 @@ public class NonBlockingServer {
             return null;
         }
         for (Session session : sessions) {
-            if (session != null && session.getUser().getId() == senderId) {
+            if (session.getUser() != null && session.getUser().getId() == senderId) {
                 return session;
             }
         }

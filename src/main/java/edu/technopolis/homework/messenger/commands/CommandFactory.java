@@ -23,6 +23,7 @@ public class CommandFactory {
             put(Type.MSG_REGISTER, new RegisterCommand(userStore));
             put(Type.MSG_CHAT_CREATE, new ChatCreateCommand(messageStore));
             put(Type.MSG_INFO, new UserInfoCommand(userStore));
+            put(Type.MSG_CHAT_LIST, new ChatListCommand(messageStore));
         }};
     }
 

@@ -82,6 +82,24 @@ public class StringProtocol implements Protocol {
                             + jsonMessage);
                 }
 
+            case MSG_CHAT_LIST:
+                try {
+                    return mapper.readValue(jsonMessage, ChatListMessage.class);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new ProtocolException("Cannot deserialize ChatListMessage from json: "
+                            + jsonMessage);
+                }
+
+            case MSG_CHAT_LIST_RESULT:
+                try {
+                    return mapper.readValue(jsonMessage, ChatListResultMessage.class);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new ProtocolException("Cannot deserialize ChatListMessageResult from json: "
+                            + jsonMessage);
+                }
+
             default:
                 throw new ProtocolException("Invalid type: " + type);
         }
@@ -159,6 +177,32 @@ public class StringProtocol implements Protocol {
                 } catch (ClassCastException classCastException) {
                     classCastException.printStackTrace();
                     throw new ProtocolException("Can't cast Message to UserInfoMessage");
+                }
+                break;
+
+            case MSG_CHAT_LIST:
+                try {
+                    ChatListMessage chatListMessage = (ChatListMessage) msg;
+                    encodedString.append(mapper.writeValueAsString(chatListMessage));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                    throw new ProtocolException("Cant serialize ChatListMessage");
+                } catch (ClassCastException classCastException) {
+                    classCastException.printStackTrace();
+                    throw new ProtocolException("Can't cast Message to ChatListMessage");
+                }
+                break;
+
+            case MSG_CHAT_LIST_RESULT:
+                try {
+                    ChatListResultMessage chatListResultMessage = (ChatListResultMessage) msg;
+                    encodedString.append(mapper.writeValueAsString(chatListResultMessage));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                    throw new ProtocolException("Cant serialize ChatListResultMessage");
+                } catch (ClassCastException classCastException) {
+                    classCastException.printStackTrace();
+                    throw new ProtocolException("Can't cast Message to ChatListResultMessage");
                 }
                 break;
 

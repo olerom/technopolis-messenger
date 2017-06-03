@@ -6,7 +6,6 @@ import edu.technopolis.homework.messenger.messages.StatusMessage;
 import edu.technopolis.homework.messenger.messages.User;
 import edu.technopolis.homework.messenger.net.ProtocolException;
 import edu.technopolis.homework.messenger.net.Session;
-import edu.technopolis.homework.messenger.net.SessionImpl;
 import edu.technopolis.homework.messenger.store.UserStore;
 
 import java.io.IOException;

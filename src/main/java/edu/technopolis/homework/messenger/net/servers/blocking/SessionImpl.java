@@ -1,4 +1,4 @@
-package edu.technopolis.homework.messenger.net;
+package edu.technopolis.homework.messenger.net.servers.blocking;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,6 +7,10 @@ import java.net.Socket;
 
 import edu.technopolis.homework.messenger.messages.User;
 import edu.technopolis.homework.messenger.messages.Message;
+import edu.technopolis.homework.messenger.net.Protocol;
+import edu.technopolis.homework.messenger.net.ProtocolException;
+import edu.technopolis.homework.messenger.net.Session;
+import edu.technopolis.homework.messenger.net.StringProtocol;
 
 /**
  * Сессия связывает бизнес-логику и сетевую часть.

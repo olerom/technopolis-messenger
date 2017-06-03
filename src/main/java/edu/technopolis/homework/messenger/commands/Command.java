@@ -4,7 +4,6 @@ import edu.technopolis.homework.messenger.messages.Message;
 import edu.technopolis.homework.messenger.messages.StatusMessage;
 import edu.technopolis.homework.messenger.net.ProtocolException;
 import edu.technopolis.homework.messenger.net.Session;
-import edu.technopolis.homework.messenger.net.SessionImpl;
 
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
