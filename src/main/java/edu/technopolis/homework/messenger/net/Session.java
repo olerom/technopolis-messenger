@@ -1,85 +1,24 @@
 package edu.technopolis.homework.messenger.net;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-
-import edu.technopolis.homework.messenger.messages.User;
 import edu.technopolis.homework.messenger.messages.Message;
+import edu.technopolis.homework.messenger.messages.User;
+
+import java.io.IOException;
 
 /**
- * Сессия связывает бизнес-логику и сетевую часть.
- * Бизнес логика представлена объектом юзера - владельца сессии.
- * Сетевая часть привязывает нас к определнному соединению по сети (от клиента)
+ * Date: 03.06.17
+ *
+ * @author olerom
  */
-public class Session {
+public interface Session {
 
-    /**
-     * Пользователь сессии, пока не прошел логин, user == null
-     * После логина устанавливается реальный пользователь
-     */
-    private User user;
+    void send(Message msg) throws ProtocolException, IOException;
 
-    // сокет на клиента
-    private Socket socket;
+    void onMessage(Message msg);
 
-    private Protocol protocol;
+    void close();
 
-    /**
-     * С каждым сокетом связано 2 канала in/out
-     */
-    private InputStream in;
-    private OutputStream out;
+    void setUser(User user);
 
-    public Session(User user, Socket socket) {
-        this.user = user;
-        this.socket = socket;
-
-        try {
-            this.in = socket.getInputStream();
-            this.out = socket.getOutputStream();
-        } catch (IOException e) {
-            System.out.println("Could't get stream");
-            e.printStackTrace();
-            System.exit(1);
-        }
-        this.protocol = new StringProtocol();
-    }
-
-    public Session(Socket socket) {
-        this.socket = socket;
-        try {
-            this.in = socket.getInputStream();
-            this.out = socket.getOutputStream();
-        } catch (IOException e) {
-            System.out.println("Could't get stream");
-            e.printStackTrace();
-            System.exit(1);
-        }
-        this.protocol = new StringProtocol();
-    }
-
-    public void send(Message msg) throws ProtocolException, IOException {
-        System.out.println("Sending info: {chat=" + msg.getChatId()
-                + ", senderId=" + msg.getSenderId() + "}");
-        out.write(protocol.encode(msg));
-        out.flush();
-    }
-
-    public void onMessage(Message msg) {
-        // TODO: Пришло некое сообщение от клиента, его нужно обработать
-    }
-
-    public void close() {
-        // TODO: закрыть in/out каналы и сокет. Освободить другие ресурсы, если необходимо
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public User getUser() {
-        return this.user;
-    }
+    User getUser();
 }

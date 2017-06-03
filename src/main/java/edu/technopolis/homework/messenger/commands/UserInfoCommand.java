@@ -3,7 +3,7 @@ package edu.technopolis.homework.messenger.commands;
 import edu.technopolis.homework.messenger.messages.*;
 import edu.technopolis.homework.messenger.net.ProtocolException;
 import edu.technopolis.homework.messenger.net.Session;
-import edu.technopolis.homework.messenger.store.MessageStore;
+import edu.technopolis.homework.messenger.net.SessionImpl;
 import edu.technopolis.homework.messenger.store.UserStore;
 
 import java.io.IOException;

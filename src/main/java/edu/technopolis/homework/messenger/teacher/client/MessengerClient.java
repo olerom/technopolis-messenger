@@ -166,6 +166,10 @@ public class MessengerClient {
                             text.append(" ");
                         }
 
+                        if (text.toString().length() > 200){
+                            System.out.println("Your text is too big. Notice that 200 symbols is max number of them.");
+                        }
+
                         TextMessage textMessage = new TextMessage(user, chatId, text.toString());
                         send(textMessage);
                     } catch (NumberFormatException e) {
@@ -175,7 +179,7 @@ public class MessengerClient {
                 break;
 
             case "/chat_create":
-                if (tokens.length < 3) {
+                if (tokens.length < 2) {
                     System.out.println("Not enough arguments");
                 } else {
                     try {
@@ -274,8 +278,8 @@ public class MessengerClient {
             System.err.println("Application failed. " + e);
         } finally {
             if (this != null) {
-                // TODO
-//                client.close();
+                System.out.println("Something went wrong. You are alive.");
+                System.exit(1);
             }
         }
     }

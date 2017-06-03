@@ -9,10 +9,8 @@ import edu.technopolis.homework.messenger.store.executor.Executor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Date: 04.05.17
@@ -37,7 +35,7 @@ public class RunnableServerLogic implements Runnable {
 
     @Override
     public void run() {
-        Session session = new Session(clientSocket);
+        Session session = new SessionImpl(clientSocket);
         sessions.add(session);
         try {
             InputStream in = clientSocket.getInputStream();
