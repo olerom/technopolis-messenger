@@ -24,6 +24,7 @@ public class CommandFactory {
             put(Type.MSG_CHAT_CREATE, new ChatCreateCommand(messageStore));
             put(Type.MSG_INFO, new UserInfoCommand(userStore));
             put(Type.MSG_CHAT_LIST, new ChatListCommand(messageStore));
+            put(Type.MSG_CHAT_HIST, new ChatHistoryCommand(messageStore));
         }};
     }
 

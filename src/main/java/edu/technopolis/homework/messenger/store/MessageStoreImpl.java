@@ -23,6 +23,21 @@ public class MessageStoreImpl implements MessageStore {
     }
 
     @Override
+    public List<String> getHistoryMessagesByChatId(Long chatId) throws SQLException {
+        return executor.execQuery("SELECT * FROM MESSAGE WHERE chat_id='" + chatId + '\'', result -> {
+            ArrayList<String> historyMessages = new ArrayList<>();
+            while (!result.isLast()) {
+                result.next();
+                String fullMessage = "";
+                fullMessage += result.getLong(3) + " wrote: ";
+                fullMessage += result.getString(4);
+                historyMessages.add(fullMessage);
+            }
+            return historyMessages;
+        });
+    }
+
+    @Override
     public List<Long> getChatsByUserId(Long userId) throws SQLException {
         return executor.execQuery("SELECT chat_id FROM USER_CHAT WHERE user_id='" + userId + '\'', result -> {
             ArrayList<Long> chats = new ArrayList<>();

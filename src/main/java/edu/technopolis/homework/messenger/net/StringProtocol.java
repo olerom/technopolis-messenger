@@ -96,7 +96,25 @@ public class StringProtocol implements Protocol {
                     return mapper.readValue(jsonMessage, ChatListResultMessage.class);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    throw new ProtocolException("Cannot deserialize ChatListMessageResult from json: "
+                    throw new ProtocolException("Cannot deserialize ChatListResultMessage from json: "
+                            + jsonMessage);
+                }
+
+            case MSG_CHAT_HIST:
+                try {
+                    return mapper.readValue(jsonMessage, ChatHistoryMessage.class);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new ProtocolException("Cannot deserialize ChatHistoryMessage from json: "
+                            + jsonMessage);
+                }
+
+            case MSG_CHAT_HIST_RESULT:
+                try {
+                    return mapper.readValue(jsonMessage, ChatHistoryResultMessage.class);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new ProtocolException("Cannot deserialize ChatHistoryResultMessage from json: "
                             + jsonMessage);
                 }
 
@@ -203,6 +221,32 @@ public class StringProtocol implements Protocol {
                 } catch (ClassCastException classCastException) {
                     classCastException.printStackTrace();
                     throw new ProtocolException("Can't cast Message to ChatListResultMessage");
+                }
+                break;
+
+            case MSG_CHAT_HIST:
+                try {
+                    ChatHistoryMessage chatHistoryMessage = (ChatHistoryMessage) msg;
+                    encodedString.append(mapper.writeValueAsString(chatHistoryMessage));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                    throw new ProtocolException("Cant serialize ChatHistoryMessage");
+                } catch (ClassCastException classCastException) {
+                    classCastException.printStackTrace();
+                    throw new ProtocolException("Can't cast Message to ChatHistoryMessage");
+                }
+                break;
+
+            case MSG_CHAT_HIST_RESULT:
+                try {
+                    ChatHistoryResultMessage chatHistoryResultMessage = (ChatHistoryResultMessage) msg;
+                    encodedString.append(mapper.writeValueAsString(chatHistoryResultMessage));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                    throw new ProtocolException("Cant serialize ChatHistoryResultMessage");
+                } catch (ClassCastException classCastException) {
+                    classCastException.printStackTrace();
+                    throw new ProtocolException("Can't cast Message to ChatHistoryResultMessage");
                 }
                 break;
 

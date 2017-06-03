@@ -128,6 +128,19 @@ public class MessengerClient {
 
                 System.out.println(chats.toString());
 
+                break;
+
+            case MSG_CHAT_HIST_RESULT:
+                ChatHistoryResultMessage chatHistoryResultMessage = (ChatHistoryResultMessage) msg;
+                StringBuilder history = new StringBuilder();
+                history.append("Your history: \n");
+
+                for (String historyMessage : chatHistoryResultMessage.getMessages()) {
+                    history.append(historyMessage).append("\n");
+                }
+
+                System.out.println(history.toString());
+
         }
     }
 
@@ -253,8 +266,28 @@ public class MessengerClient {
                         ChatListMessage chatListMessage = new ChatListMessage(this.user);
                         send(chatListMessage);
 
+                    } catch (InstantiationException e) {
+                        System.out.println("Something went wrong.");
+                        e.printStackTrace();
+                    }
+                }
+
+                break;
+
+            case "/chat_history":
+
+                if (tokens.length != 2) {
+                    System.out.println("This command requires 2 arguments");
+                } else {
+                    try {
+
+                        Long chatId = Long.valueOf(tokens[1]);
+
+                        ChatHistoryMessage chatHistoryMessage = new ChatHistoryMessage(this.user, chatId);
+                        send(chatHistoryMessage);
+
                     } catch (NumberFormatException numberFormatException) {
-                        System.out.println("Can't parse friend id");
+                        System.out.println("Can't parse chat id");
                     } catch (InstantiationException e) {
                         System.out.println("Something went wrong.");
                         e.printStackTrace();

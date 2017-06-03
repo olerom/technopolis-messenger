@@ -10,6 +10,12 @@ public interface MessageStore {
     /**
      * Получаем список ид чатов заданного пользователя
      */
+
+    List<String> getHistoryMessagesByChatId(Long chatId) throws SQLException;
+
+    /**
+     * Получаем список ид чатов заданного пользователя
+     */
     List<Long> getChatsByUserId(Long userId) throws SQLException;
 
     /**
