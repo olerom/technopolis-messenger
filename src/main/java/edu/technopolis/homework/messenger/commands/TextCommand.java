@@ -35,39 +35,38 @@ public class TextCommand implements Command {
 
         try {
             messageStore.addMessage(textMessage.getChatId(), textMessage);
+
+            List<Long> receiverIds = messageStore.getUserIdsByChatId(message.getChatId());
+
+            ChatManager chatManager = new ChatManager(sessions, receiverIds, textMessage);
+
+            new Thread(chatManager).start();
+
+
+//          ¯\_(ツ)_/¯
+//            for (Session participantSession : sessions) {
+//                for (long userId : receiverIds) {
+//                    if (participantSession.getUser() != null && participantSession.getUser().getId() == userId) {
+//                        try {
+//                            participantSession.send(textMessage);
+//                        } catch (ProtocolException e) {
+//                            e.printStackTrace();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }
+//            }
+
+
+            StatusMessage statusMessage = new StatusMessage("Your message is delivered to chat "
+                    + message.getChatId());
+
+            session.send(statusMessage);
         } catch (SQLException e) {
             System.out.println("Can't add message to DB");
             e.printStackTrace();
-        }
-        try {
-
-            List<Long> recieverIds = messageStore.getUserIdsByChatId(message.getChatId());
-
-//          ¯\_(ツ)_/¯
-            for (Session participantSession : sessions) {
-                for (long userId : recieverIds) {
-                    if (participantSession.getUser() != null && participantSession.getUser().getId() == userId) {
-                        try {
-                            participantSession.send(textMessage);
-                        } catch (ProtocolException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        StatusMessage statusMessage = new StatusMessage("Your message is delivered to chat "
-                + message.getChatId());
-        try {
-            session.send(statusMessage);
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (ProtocolException | IOException e) {
             e.printStackTrace();
         }
     }

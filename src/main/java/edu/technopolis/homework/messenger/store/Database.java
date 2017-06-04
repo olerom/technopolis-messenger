@@ -27,4 +27,8 @@ public interface Database {
     void dropAdminChat() throws SQLException;
 
     Executor getExecutor();
+
+    void initTables() throws SQLException;
+
+    void dropTables() throws SQLException;
 }

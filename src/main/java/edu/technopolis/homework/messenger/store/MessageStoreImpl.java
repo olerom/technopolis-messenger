@@ -135,6 +135,9 @@ public class MessageStoreImpl implements MessageStore {
         executor.execUpdate("INSERT INTO ADMIN_CHAT (user_id, chat_id) values ('"
                 + creatorId + "', '" + chatId + "')");
 
+        executor.execUpdate("INSERT INTO USER_CHAT (user_id, chat_id) values ('"
+                + creatorId + "', '" + chatId + "')");
+
         for (long friend : friends) {
             executor.execUpdate("INSERT INTO USER_CHAT (user_id, chat_id) values ('"
                     + friend + "', '" + chatId + "')");
@@ -149,12 +152,13 @@ public class MessageStoreImpl implements MessageStore {
 
     private long maxChatId() {
         try {
-            return executor.execQuery("SELECT MAX(chat_id) FROM MESSAGE GROUP BY chat_id", result -> {
+            return executor.execQuery("SELECT MAX(chat_id) FROM ADMIN_CHAT", result -> {
                 result.next();
                 return result.getLong(1);
             });
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("Table is probably empty");
             return 0L;
         }
     }

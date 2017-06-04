@@ -71,7 +71,7 @@ public class DatabaseImpl implements Database {
 
     @Override
     public void initAdminChat() throws SQLException {
-        executor.execUpdate("CREATE TABLE if not exists ADMIN_CHAT (user_id bigint, chat_id bigint, primary key (user_id, chat_id));");
+        executor.execUpdate("CREATE TABLE if not exists ADMIN_CHAT (user_id bigint, chat_id bigint, primary key (chat_id));");
     }
 
     @Override
@@ -97,6 +97,22 @@ public class DatabaseImpl implements Database {
     @Override
     public Executor getExecutor() {
         return this.executor;
+    }
+
+    @Override
+    public void initTables() throws SQLException {
+        initAdminChat();
+        initMessages();
+        initUserChat();
+        initUsers();
+    }
+
+    @Override
+    public void dropTables() throws SQLException {
+        dropAdminChat();
+        dropMessages();
+        dropUserChat();
+        dropUsers();
     }
 
 }

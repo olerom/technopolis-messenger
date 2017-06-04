@@ -29,14 +29,8 @@ public class NonBlockingServer {
         Database database = new DatabaseImpl();
 
         try {
-            database.initMessages();
-            database.initUsers();
-            database.initUserChat();
-            database.initAdminChat();
-//            database.dropMessages();
-//            database.dropUsers();
-//            database.dropUserChat();
-//            database.dropAdminChat();
+            database.initTables();
+//            database.dropTables();
         } catch (SQLException e) {
             System.out.println("Couldn't create tables. Quitting...");
             e.printStackTrace();
