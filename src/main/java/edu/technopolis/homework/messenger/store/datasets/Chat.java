@@ -1,4 +1,7 @@
-package edu.technopolis.homework.messenger.messages;
+package edu.technopolis.homework.messenger.store.datasets;
+
+import edu.technopolis.homework.messenger.messages.Message;
+import edu.technopolis.homework.messenger.store.datasets.User;
 
 import java.util.List;
 
@@ -20,16 +23,20 @@ public class Chat {
         this.adminId = adminId;
     }
 
-    public void addMessage(Message message) {
-
+    public long getId() {
+        return id;
     }
 
-    public void addParticipant(User participant) {
-
+    public List<Long> getMessageIds() {
+        return messageIds;
     }
 
-    public void removeParticipant(User participant) {
+    public List<Long> getParticipantIds() {
+        return participantIds;
+    }
 
+    public long getAdminId() {
+        return adminId;
     }
 
     @Override

@@ -8,13 +8,15 @@ import edu.technopolis.homework.messenger.net.Session;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Level;
 /**
  * Date: 05.05.17
  *
  * @author olerom
  */
 public interface Command {
-
     /**
      * Реализация паттерна Команда. Метод execute() вызывает соответствующую реализацию,
      * для запуска команды нужна сессия, чтобы можно было сгенерить ответ клиенту и провести валидацию

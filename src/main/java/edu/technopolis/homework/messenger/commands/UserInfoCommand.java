@@ -4,11 +4,15 @@ import edu.technopolis.homework.messenger.messages.*;
 import edu.technopolis.homework.messenger.net.ProtocolException;
 import edu.technopolis.homework.messenger.net.Session;
 import edu.technopolis.homework.messenger.store.UserStore;
+import edu.technopolis.homework.messenger.store.datasets.User;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 /**
  * Date: 08.05.17
  *
@@ -16,6 +20,7 @@ import java.util.concurrent.BlockingQueue;
  */
 public class UserInfoCommand implements Command {
 
+    private static Logger LOGGER = LogManager.getLogger(UserInfoCommand.class.getName());
     private UserStore userStore;
 
     public UserInfoCommand(UserStore userStore) {
@@ -43,11 +48,11 @@ public class UserInfoCommand implements Command {
 
             session.send(info);
         } catch (SQLException | ProtocolException | IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARN, "Can't get user info: ", e);
             try {
                 session.send(new StatusMessage("Can't find user with this id"));
             } catch (ProtocolException | IOException e1) {
-                e1.printStackTrace();
+                LOGGER.log(Level.WARN, "Can't send message: ", e1);
             }
         }
 

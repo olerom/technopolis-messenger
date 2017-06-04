@@ -13,12 +13,16 @@ import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Level;
 /**
  * Date: 04.06.17
  *
  * @author olerom
  */
 public class ChatHistoryCommand implements Command {
+    private static Logger LOGGER = LogManager.getLogger(ChatHistoryCommand.class.getName());
 
     private MessageStore messageStore;
 
@@ -41,13 +45,13 @@ public class ChatHistoryCommand implements Command {
 
             session.send(chatHistoryResultMessage);
         } catch (ClassCastException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARN, "Can't cast message: ", e);
         } catch (SQLException | InstantiationException | ProtocolException | IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARN, "Can't get history: ", e);
             try {
                 session.send(new StatusMessage("Can't find history for your chat"));
             } catch (ProtocolException | IOException e1) {
-                e1.printStackTrace();
+                LOGGER.log(Level.WARN, "Can't send message: ", e);
             }
         }
 

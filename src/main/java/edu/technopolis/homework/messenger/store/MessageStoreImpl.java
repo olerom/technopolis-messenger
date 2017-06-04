@@ -1,6 +1,6 @@
 package edu.technopolis.homework.messenger.store;
 
-import edu.technopolis.homework.messenger.messages.Chat;
+import edu.technopolis.homework.messenger.store.datasets.Chat;
 import edu.technopolis.homework.messenger.messages.Message;
 import edu.technopolis.homework.messenger.messages.TextMessage;
 import edu.technopolis.homework.messenger.store.executor.Executor;

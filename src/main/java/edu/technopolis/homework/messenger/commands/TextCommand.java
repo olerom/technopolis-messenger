@@ -6,6 +6,9 @@ import edu.technopolis.homework.messenger.messages.TextMessage;
 import edu.technopolis.homework.messenger.net.ProtocolException;
 import edu.technopolis.homework.messenger.net.Session;
 import edu.technopolis.homework.messenger.store.MessageStore;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,6 +22,7 @@ import java.util.concurrent.BlockingQueue;
  */
 public class TextCommand implements Command {
 
+    private static Logger LOGGER = LogManager.getLogger(TextCommand.class.getName());
     private MessageStore messageStore;
 
     public TextCommand(MessageStore messageStore) {
@@ -42,32 +46,14 @@ public class TextCommand implements Command {
 
             new Thread(chatManager).start();
 
-
-//          ¯\_(ツ)_/¯
-//            for (Session participantSession : sessions) {
-//                for (long userId : receiverIds) {
-//                    if (participantSession.getUser() != null && participantSession.getUser().getId() == userId) {
-//                        try {
-//                            participantSession.send(textMessage);
-//                        } catch (ProtocolException e) {
-//                            e.printStackTrace();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-//            }
-
-
             StatusMessage statusMessage = new StatusMessage("Your message is delivered to chat "
                     + message.getChatId());
 
             session.send(statusMessage);
         } catch (SQLException e) {
-            System.out.println("Can't add message to DB");
-            e.printStackTrace();
+            LOGGER.log(Level.WARN, "Can't add message to DB: ", e);
         } catch (ProtocolException | IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARN, "Can't send message: ", e);
         }
     }
 }

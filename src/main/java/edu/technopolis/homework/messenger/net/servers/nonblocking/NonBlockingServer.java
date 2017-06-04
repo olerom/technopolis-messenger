@@ -9,15 +9,22 @@ import edu.technopolis.homework.messenger.net.Session;
 import edu.technopolis.homework.messenger.net.StringProtocol;
 import edu.technopolis.homework.messenger.store.*;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Level;
 
 /**
  * Date: 02.06.17
@@ -25,15 +32,18 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @author olerom
  */
 public class NonBlockingServer {
+
+    private static Logger LOGGER = LogManager.getLogger(NonBlockingServer.class.getName());
+
     public static void main(String[] args) {
+
         Database database = new DatabaseImpl();
 
         try {
             database.initTables();
 //            database.dropTables();
         } catch (SQLException e) {
-            System.out.println("Couldn't create tables. Quitting...");
-            e.printStackTrace();
+            LOGGER.log(Level.FATAL, "Couldn't create tables", e);
             System.exit(1);
         }
 
@@ -78,8 +88,9 @@ public class NonBlockingServer {
                     } catch (IOException e) {
                         close(sc);
                         e.printStackTrace();
+                        LOGGER.log(Level.WARN, "Problems with SocketChannel: ", e);
                     } catch (ProtocolException e) {
-                        e.printStackTrace();
+                        LOGGER.log(Level.WARN, "Problems with SocketChannel closing: ", e);
                     }
                 });
             }
@@ -92,15 +103,28 @@ public class NonBlockingServer {
 
     private static ServerSocketChannel openAndBind() throws IOException {
         ServerSocketChannel open = ServerSocketChannel.open();
-        open.bind(new InetSocketAddress(19000));
+
+        try (InputStream input = new FileInputStream("./src/main/resources/portConfiguration.properties")) {
+
+            Properties properties = new Properties();
+            properties.load(input);
+
+            int port = Integer.valueOf(properties.getProperty("port"));
+            open.bind(new InetSocketAddress(port));
+
+        } catch (IOException e) {
+            LOGGER.log(Level.FATAL, "Can't read port property", e);
+            System.exit(1);
+        }
+
         return open;
     }
 
     private static void close(SocketChannel sc) {
         try {
             sc.close();
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        } catch (IOException e) {
+            LOGGER.log(Level.WARN, "Can't close SocketChannel", e);
         }
     }
 

@@ -1,4 +1,4 @@
-package edu.technopolis.homework.messenger.messages;
+package edu.technopolis.homework.messenger.store.datasets;
 
 /**
  *

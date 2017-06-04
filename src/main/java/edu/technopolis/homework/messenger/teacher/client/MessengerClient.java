@@ -5,6 +5,7 @@ import edu.technopolis.homework.messenger.messages.*;
 import edu.technopolis.homework.messenger.net.Protocol;
 import edu.technopolis.homework.messenger.net.ProtocolException;
 import edu.technopolis.homework.messenger.net.StringProtocol;
+import edu.technopolis.homework.messenger.store.datasets.User;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -330,7 +331,7 @@ public class MessengerClient {
                 String input = scanner.readLine();
                 if ("/q".equals(input)) {
                     scanner.close();
-                    return;
+                    System.exit(0);
                 }
                 try {
                     processInput(input);
@@ -342,7 +343,7 @@ public class MessengerClient {
             System.err.println("Application failed. " + e);
         } finally {
             if (this != null) {
-                System.out.println("Something went wrong. You are alive.");
+                System.out.println("Something went wrong.");
                 System.exit(1);
             }
         }

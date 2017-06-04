@@ -4,6 +4,9 @@ import edu.technopolis.homework.messenger.messages.ChatCreateMessage;
 import edu.technopolis.homework.messenger.messages.Message;
 import edu.technopolis.homework.messenger.net.Session;
 import edu.technopolis.homework.messenger.store.MessageStore;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
@@ -15,6 +18,7 @@ import java.util.concurrent.BlockingQueue;
  */
 public class ChatCreateCommand implements Command {
 
+    private static Logger LOGGER = LogManager.getLogger(ChatCreateCommand.class.getName());
     private MessageStore messageStore;
 
     public ChatCreateCommand(MessageStore messageStore) {
@@ -32,9 +36,9 @@ public class ChatCreateCommand implements Command {
 
             messageStore.createChat(message.getSenderId(), chatCreateMessage.getParticipants());
         } catch (ClassCastException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARN, "Can't cast message: ", e);
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARN, "Can't create chat: ", e);
         }
     }
 }

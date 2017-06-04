@@ -3,7 +3,7 @@ package edu.technopolis.homework.messenger.store;
 import java.sql.SQLException;
 import java.util.List;
 
-import edu.technopolis.homework.messenger.messages.Chat;
+import edu.technopolis.homework.messenger.store.datasets.Chat;
 import edu.technopolis.homework.messenger.messages.Message;
 
 public interface MessageStore {

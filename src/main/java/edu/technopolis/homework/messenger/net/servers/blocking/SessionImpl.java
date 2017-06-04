@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import edu.technopolis.homework.messenger.messages.User;
+import edu.technopolis.homework.messenger.store.datasets.User;
 import edu.technopolis.homework.messenger.messages.Message;
 import edu.technopolis.homework.messenger.net.Protocol;
 import edu.technopolis.homework.messenger.net.ProtocolException;
@@ -69,14 +69,6 @@ public class SessionImpl implements Session {
                 + ", senderId=" + msg.getSenderId() + "}");
         out.write(protocol.encode(msg));
         out.flush();
-    }
-
-    public void onMessage(Message msg) {
-        // TODO: Пришло некое сообщение от клиента, его нужно обработать
-    }
-
-    public void close() {
-        // TODO: закрыть in/out каналы и сокет. Освободить другие ресурсы, если необходимо
     }
 
     public void setUser(User user) {

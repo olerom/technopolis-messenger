@@ -1,5 +1,7 @@
 package edu.technopolis.homework.messenger.messages;
 
+import edu.technopolis.homework.messenger.store.datasets.User;
+
 /**
  * Date: 08.05.17
  *

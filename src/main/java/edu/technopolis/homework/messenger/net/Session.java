@@ -1,7 +1,7 @@
 package edu.technopolis.homework.messenger.net;
 
 import edu.technopolis.homework.messenger.messages.Message;
-import edu.technopolis.homework.messenger.messages.User;
+import edu.technopolis.homework.messenger.store.datasets.User;
 
 import java.io.IOException;
 
@@ -13,10 +13,6 @@ import java.io.IOException;
 public interface Session {
 
     void send(Message msg) throws ProtocolException, IOException;
-
-    void onMessage(Message msg);
-
-    void close();
 
     void setUser(User user);
 
