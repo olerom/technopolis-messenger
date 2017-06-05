@@ -32,11 +32,10 @@ public interface Command {
         if (session.getUser() == null) {
             try {
                 session.send(new StatusMessage("You are not logged in"));
-                return false;
             } catch (ProtocolException | IOException e) {
                 e.printStackTrace();
-                return false;
             }
+            return false;
         }
         return true;
     }

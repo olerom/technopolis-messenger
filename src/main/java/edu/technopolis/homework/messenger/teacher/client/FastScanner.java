@@ -1,6 +1,7 @@
 package edu.technopolis.homework.messenger.teacher.client;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -9,7 +10,7 @@ import java.io.InputStreamReader;
  *
  * @author olerom
  */
-public class FastScanner {
+public class FastScanner implements Closeable {
     private BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
     public String readLine() throws IOException {

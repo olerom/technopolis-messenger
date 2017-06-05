@@ -316,14 +316,13 @@ public class MessengerClient {
     }
 
     private void run(String[] args) throws Exception {
-
         setHost(HOST);
         setPort(PORT);
         setProtocol(new StringProtocol());
 
-        try {
+        try (FastScanner scanner = new FastScanner()) {
             initSocket();
-            FastScanner scanner = new FastScanner();
+
 
             // Цикл чтения с консоли
             System.out.println("$");
@@ -341,11 +340,6 @@ public class MessengerClient {
             }
         } catch (Exception e) {
             System.err.println("Application failed. " + e);
-        } finally {
-            if (this != null) {
-                System.out.println("Something went wrong.");
-                System.exit(1);
-            }
         }
     }
 }
